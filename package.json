@@ -41,5 +41,8 @@
 		"typescript": "^5.2.2",
 		"vite": "^5.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"postcss-import": "^16.0.1"
+	}
 }

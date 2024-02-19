@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "../app.pcss";
+    import '../app.pcss';
     import './styles.css';
 </script>
 
@@ -7,4 +7,5 @@
     <title>AZtools</title>
 </svelte:head>
 
-<slot></slot>
+
+<slot />
