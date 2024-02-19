@@ -9,8 +9,8 @@
 
 <script lang="ts">
     import { tick } from 'svelte';
-    import Icon from '@iconify/svelte';
     import type { ActionReturn } from 'svelte/action';
+    import Icon from './MaterialSymbol.svelte';
 
     export let shown = false;
     export let title = '';
@@ -74,11 +74,11 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="modal-container fixed m-auto top-0 left-0 right-0 bottom-0 flex backdrop-blur-sm" on:click={onClick} use:portalTo style:z-index={zIndex}>
-        <div class="modal flex flex-col {width} {height} max-h-[580px] bg-surface-800 rounded-md overflow-hidden m-auto">
-            <div class="header flex justify-between items-start capitalize text-lg font-semibold p-5 bg-surface-600">
+        <div class="modal flex flex-col {width} {height} max-h-[580px] bg-slate-800 rounded-md overflow-hidden m-auto">
+            <div class="header flex justify-between items-start capitalize text-lg font-semibold p-5 bg-slate-600">
                 <div class="title">{title}</div>
-                <button type="button" class="close" on:click={() => shown = !shown}>
-                    <Icon icon="ph:x" class="text-white/50 hover:text-white/70 transition-colors text-2xl" />
+                <button type="button" class="close text-2xl h-6 w-6" on:click={() => shown = !shown}>
+                    <Icon name="close" />
                 </button>
             </div>
             <div class="body flex flex-col p-5 overflow-auto">
