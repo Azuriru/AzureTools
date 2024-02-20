@@ -13,7 +13,7 @@
 </svelte:head>
 
 <Sidebar />
-<Column>
+<Column layout="min-w-0">
     <Header />
     <slot />
 </Column>

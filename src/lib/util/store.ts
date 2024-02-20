@@ -56,7 +56,7 @@ export const localStorageBacked = function<T>(key: string, initial: T) {
 
 export const centralizedKey = 'azuretools-persistibles';
 export type JSONValue = null | boolean | number | string | JSONValue[] | { [k: string]: JSONValue };
-export const persistibles = function<T extends JSONValue>(localKey: string, initial: T): StoreContract<T> {
+export const persistible = function<T extends JSONValue>(localKey: string, initial: T): StoreContract<T> {
     let data: Record<string, T> = {};
 
     data[localKey] = initial;

@@ -9,6 +9,7 @@ export default {
 	},
 	plugins: [
 		skeleton({
+			base: false,
 			themes: {
 				preset: [
 					{
