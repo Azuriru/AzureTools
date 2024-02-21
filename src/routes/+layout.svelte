@@ -15,7 +15,7 @@
 <Sidebar />
 <Column layout="min-w-0">
     <Header />
-    <Column layout="p-2  overflow-y-auto">
+    <Column layout="p-2  overflow-y-auto bg-slate-950">
         <slot />
     </Column>
 </Column>

@@ -3,7 +3,7 @@
     import { Row, Column } from '$lib/components/layout';
 </script>
 
-<Column name="tools" layout="space-y-2 bg-slate-950">
+<Column name="tools" layout="space-y-2">
     <Wallets compact={1} />
     {#each new Array(4) as _, i (i)}
         <Row shrink={0} layout="h-96 bg-slate-700 rounded" />

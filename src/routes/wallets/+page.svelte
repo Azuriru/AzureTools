@@ -3,4 +3,4 @@
 </script>
 
 <Wallets />
-<ImportWallets />
+<!-- <ImportWallets /> -->
