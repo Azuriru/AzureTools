@@ -3,6 +3,7 @@
     import { privateKeyToAccount } from 'viem/accounts';
     import { getToastStore } from '@skeletonlabs/skeleton';
     import { startsWith } from '$lib/util';
+    import { t } from '$lib/i18n';
     import { toastMessage } from '$lib/util/toast';
     import { wallets } from '$lib/util/wallets';
     import { MaterialSymbol, Button, Textarea, Modal } from '$lib/components';
@@ -14,13 +15,14 @@
 
     async function onSubmit() {
         if (!privateKeyValue.trim()) {
-            toastStore.trigger(toastMessage('import-error-empty'));
+            toastStore.trigger(toastMessage('wallets.import-all-error-empty'));
             privateKeyModalShown = false;
             return;
         }
 
         let privateKeys = privateKeyValue.trim().split('\n');
         let importErrors = privateKeys.length;
+        let importDuplicates = 0;
 
         for (let privateKey of privateKeys) {
             if (!startsWith(privateKey, '0x')) {
@@ -30,23 +32,28 @@
             try {
                 if ($wallets.import(privateKeyToAccount(privateKey as Hex).address)) {
                     importErrors--;
+                } else {
+                    importDuplicates++;
                 }
             } catch(e) { /* viem can go fuck itself */ }
         }
 
         if (!importErrors) {
-            toastStore.trigger(toastMessage('import-all-successful'));
+            toastStore.trigger(toastMessage('wallets.import-all-successful'));
         } else if (importErrors < privateKeys.length) {
-            toastStore.trigger(toastMessage('import-all-error'));
+            toastStore.trigger(toastMessage('wallets.import-all-error-generic'));
         } else {
-            toastStore.trigger(toastMessage('import-all-failed'));
+            toastStore.trigger(toastMessage('wallets.import-all-error-fail'));
+        }
+
+        if (importDuplicates) {
+            toastStore.trigger(toastMessage('wallets.import-all-warn-duplicates'));
         }
 
         privateKeyModalShown = false;
         privateKeyValue = '';
     }
 </script>
-
 
 <Button
     type={0}
@@ -56,15 +63,15 @@
     <MaterialSymbol name="add" />
 </Button>
 
-<Modal title="dashboard.import-private-key" shown={privateKeyModalShown}>
+<Modal title={$t('wallets.manage')} shown={privateKeyModalShown}>
     <Textarea
         bind:value={privateKeyValue}
         class="mb-4"
         rows={6}
-        placeholder="Add your private keys, each on a new line"
-        label="Import Private Keys"
+        placeholder={$t('wallets.import-placeholder')}
+        label={$t('wallets.import-label')}
     />
     <Button onClick={onSubmit}>
-        Import
+        {$t('wallets.import')}
     </Button>
 </Modal>

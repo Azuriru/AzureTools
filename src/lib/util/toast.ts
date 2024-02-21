@@ -1,4 +1,5 @@
 import { type ToastSettings } from '@skeletonlabs/skeleton';
+import { t } from '$lib/i18n';
 
 export const toastMessage = (message: string): ToastSettings => {
     let background: string | undefined;
@@ -8,7 +9,7 @@ export const toastMessage = (message: string): ToastSettings => {
     }
 
     if (message.includes('warn')) {
-        background = 'variant-filled-warn';
+        background = 'variant-filled-warning';
     }
 
     if (message.includes('error') || message.includes('fail')) {
@@ -16,7 +17,7 @@ export const toastMessage = (message: string): ToastSettings => {
     }
 
     return {
-        message: `toast.${message}`,
+        message: t.get(message),
         background
     }
 }
