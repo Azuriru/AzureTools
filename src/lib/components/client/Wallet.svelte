@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { wallets } from '$lib/util/wallets';
     import { getBalance, formatBalance } from '$lib/util/wallet';
     import { Row, Column } from '$lib/components/layout';
@@ -30,7 +31,7 @@
     <Column name="balance" align={1} layout="!mt-0 h-16">
         {#await getBalance(address)}
             <Row>
-                Loading balance...
+                {$t('wallet.balance-loading')}
             </Row>
         {:then { chain, usdt }}
             <Row name="balance-chain" layout="text-3xl font-semibold mb-1">
@@ -58,7 +59,7 @@
     >
         {#each tablist as tab, i (tab)}
             <Tab bind:group={selectedTab} name={tab} value={i}>
-                {tab}
+                {$t(tab)}
             </Tab>
         {/each}
     </TabGroup>

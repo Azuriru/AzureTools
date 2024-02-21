@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { Column, Row } from '.';
-    import MaterialSymbol from '../MaterialSymbol.svelte';
+    import { MaterialSymbol } from '../.';
 
     const sidebarItems = [
         ['dashboard', 'sidebar.dashboard'],
@@ -8,7 +9,7 @@
     ] as const;
 </script>
 
-<Column name="sidebar" shrink={0} layout="group max-w-16 h-full py-2 pr-4 bg-slate-800 hover:max-w-full space-y-4 shadow-md z-10 transition-all overflow-hidden">
+<Column name="sidebar" shrink={0} layout="group max-w-16 h-full py-2 pr-4 bg-slate-800 hover:max-w-64 space-y-4 shadow-md z-10 transition-all overflow-hidden">
     <Row name="sidebar-item sidebar-logo opacity-60 hover:opacity-100 transition-opacity" grow={0} layout="h-11">
         <Row
             name="sidebar-icon"
@@ -36,9 +37,8 @@
                 >
                     <MaterialSymbol {name} />
                 </Row>
-                <Row name="sidebar-title" layout="opacity-0 group-hover:opacity-100 transition-opacity">{title}</Row>
+                <Row name="sidebar-title" layout="opacity-0 group-hover:opacity-100 transition-opacity">{$t(title)}</Row>
             </Row>
         </a>
-
     {/each}
 </Column>

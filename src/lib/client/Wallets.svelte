@@ -1,26 +1,9 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { wallets } from '$lib/util/wallets';
-    import { getBalance, formatBalance } from '$lib/util/wallet';
-    import { Row, Column } from '$lib/components/layout';
-    import { Button, MaterialSymbol } from '$lib/components';
-    import { Tab, TabGroup } from '@skeletonlabs/skeleton';
+    import { Row } from '$lib/components/layout';
     import { Wallet } from '$lib/components/client';
-
-    let selectedTab = 0;
-
-    const tablist = [
-        'Tokens',
-        'NFTs',
-        'Activity'
-    ];
-
-// const tablist = [
-    //     'wallet.tokens',
-    //     'wallet.nfts',
-    //     'wallet.activity'
-    // ];
 </script>
-
 
 {#if $wallets.state.length}
     <Row
@@ -42,7 +25,6 @@
         justify={1}
         layout="h-32 bg-slate-700 rounded p-4"
     >
-
-        You don't seem to have any wallets, import some!
+        {$t('wallets.empty')}
     </Row>
 {/if}
