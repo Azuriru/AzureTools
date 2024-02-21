@@ -2,8 +2,8 @@ import { browser } from '$app/environment';
 import { createPublicClient, http, type Hex } from 'viem';
 import { bsc, bscTestnet } from 'viem/chains';
 import assert from 'assertmin';
-import { persistible, centralizedKey } from './store';
-import { readable, writable } from 'svelte/store';
+import { centralizedKey } from './store';
+import { readable } from 'svelte/store';
 
 export const targetNetwork = process.env.NODE_ENV == 'development' ? bscTestnet : bsc;
 export const contractAddress = '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd';
@@ -17,6 +17,9 @@ interface WalletStack<State, Event> {
     state: State;
     index: number;
     do(event: Event): void;
+    add(address: Hex): boolean;
+    remove(address: Hex): boolean;
+    import(address: Hex): boolean;
 }
 
 type AddEvent = {
@@ -26,14 +29,15 @@ type AddEvent = {
 
 type RemoveEvent = {
     type: 'remove';
+    index: number;
+};
+
+type ImportEvent = {
+    type: 'import';
     address: Hex;
 };
 
-type EditEvent = {
-    type: 'edit';
-};
-
-type Event = AddEvent | RemoveEvent | EditEvent;
+type Event = AddEvent | RemoveEvent | ImportEvent;
 
 export type State = Hex[];
 
@@ -82,10 +86,10 @@ export class WalletManager implements WalletStack<State | null, Event> {
                 this.state.push(event.address);
                 break;
             case 'remove':
-                this.state.splice(this.state.indexOf(event.address), 1);
+                this.state.splice(event.index, 1);
                 break;
-            case 'edit':
-                // this.state.groups[event.groupIndex].items[event.itemIndex] = event.edited;
+            case 'import':
+                this.state.push(event.address);
                 break;
             default:
                 assert.unreachable(event);
@@ -96,11 +100,45 @@ export class WalletManager implements WalletStack<State | null, Event> {
 
         return true;
     }
+
+    add(address: Hex): boolean {
+        if (this.state.includes(address)) return false;
+
+        this.do({
+            type: 'add',
+            address
+        });
+
+        return true;
+    }
+
+    remove(address: Hex): boolean {
+        const index = this.state.indexOf(address);
+
+        if (index === -1) return false;
+
+        this.do({
+            type: 'remove',
+            index
+        });
+
+        return true;
+    }
+
+    import(address: Hex): boolean {
+        if (this.state.includes(address)) return false;
+
+        this.do({
+            type: 'import',
+            address
+        });
+
+        return true;
+    }
 }
 
 export const wallets = readable<WalletManager>(null as never, (set) => {
     const hist = new WalletManager(set, []);
-
     set(hist);
 });
 

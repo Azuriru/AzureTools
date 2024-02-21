@@ -2,10 +2,10 @@
     import { Column, Sidebar, Header } from '$lib/components/layout';
     import { initializeStores, Toast } from '@skeletonlabs/skeleton';
 
-    initializeStores();
-
     import '../app.pcss';
     import './styles.css';
+
+    initializeStores();
 </script>
 
 <svelte:head>
@@ -15,7 +15,9 @@
 <Sidebar />
 <Column layout="min-w-0">
     <Header />
-    <slot />
+    <Column layout="p-2  overflow-y-auto">
+        <slot />
+    </Column>
 </Column>
 
 <Toast position="tr" />

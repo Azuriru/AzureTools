@@ -12,6 +12,13 @@ export const config: Config = {
         zh: { lang }
     },
     loaders: [
+        {
+            locale: 'en',
+            key: '',
+            loader: async () => (
+                await import('./en.json')
+            ).default
+        }
     ]
 };
 

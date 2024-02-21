@@ -3,12 +3,13 @@
     import MaterialSymbol from '../MaterialSymbol.svelte';
 
     const sidebarItems = [
-        ['dashboard', 'sidebar.dashboard']
+        ['dashboard', 'sidebar.dashboard'],
+        ['wallet', 'sidebar.wallets']
     ] as const;
 </script>
 
-<Column name="sidebar" grow={0} layout="group w-16 h-full py-2 bg-slate-800 hover:w-72 space-y-4 shadow-md z-10 transition-all">
-    <Row name="sidebar-item sidebar-logo" grow={0} layout="h-11">
+<Column name="sidebar" shrink={0} layout="group max-w-16 h-full py-2 pr-4 bg-slate-800 hover:max-w-full space-y-4 shadow-md z-10 transition-all overflow-hidden">
+    <Row name="sidebar-item sidebar-logo opacity-60 hover:opacity-100 transition-opacity" grow={0} layout="h-11">
         <Row
             name="sidebar-icon"
             grow={0}
@@ -22,18 +23,22 @@
     </Row>
     {#each sidebarItems as item (item)}
         {@const [ name, title ] = item}
-        <Row name="sidebar-item" grow={0} layout="h-11">
-            <Row
-                name="sidebar-icon"
-                grow={0}
-                shrink={0}
-                justify={1}
-                layout="w-16 text-4xl"
-            >
-                <MaterialSymbol {name} />
+        {@const url = title.slice(8)}
+        {@const href = url === 'dashboard' ? '/' : url}
+        <a {href}>
+            <Row name="sidebar-item" grow={0} layout="h-11 opacity-60 hover:opacity-100 transition-opacity">
+                <Row
+                    name="sidebar-icon"
+                    grow={0}
+                    shrink={0}
+                    justify={1}
+                    layout="w-16 text-4xl"
+                >
+                    <MaterialSymbol {name} />
+                </Row>
+                <Row name="sidebar-title" layout="opacity-0 group-hover:opacity-100 transition-opacity">{title}</Row>
             </Row>
-            <Row name="sidebar-title" layout="opacity-0 group-hover:opacity-100 transition-opacity">{title}</Row>
-        </Row>
+        </a>
 
     {/each}
 </Column>

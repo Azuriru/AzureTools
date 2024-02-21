@@ -11,3 +11,4 @@ export { default as Modal } from './Modal.svelte';
 export { default as Popup } from './Popup.svelte';
 export { default as Toggle } from './Toggle.svelte';
 export { default as Button } from './Button.svelte';
+export { default as Textarea } from './Textarea.svelte';
