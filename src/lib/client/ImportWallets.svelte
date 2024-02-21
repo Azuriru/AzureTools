@@ -39,9 +39,9 @@
         }
 
         if (!importErrors) {
-            toastStore.trigger(toastMessage('wallets.import-all-successful'));
+            toastStore.trigger(toastMessage('wallets.import-all-success'));
         } else if (importErrors < privateKeys.length) {
-            toastStore.trigger(toastMessage('wallets.import-all-error-generic'));
+            toastStore.trigger(toastMessage('wallets.import-all-warn-generic'));
         } else {
             toastStore.trigger(toastMessage('wallets.import-all-error-fail'));
         }
