@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { MaterialSymbol } from '.';
 
     export let wrapperClasses = '';
     export let headerClasses = '';
@@ -29,6 +30,7 @@
     <button type="button" on:click={onClick} class="collapsible-toggle {showArrow ? 'flex items-center pr-4' : ''} {headerClasses}">
         <slot name="header" />
         {#if showArrow}
+            <MaterialSymbol name="keyboard_arrow_down" />
         {/if}
     </button>
     <div bind:this={content} class="collapsible-content transition-[height] {contentClasses}">

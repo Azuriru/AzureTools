@@ -75,7 +75,7 @@
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="modal-container fixed m-auto top-0 left-0 right-0 bottom-0 flex backdrop-blur-sm" on:click={onClick} use:portalTo style:z-index={zIndex}>
         <div class="modal flex flex-col {width} {height} max-h-[580px] bg-slate-800 rounded-md overflow-hidden m-auto">
-            <div class="header flex justify-between items-start capitalize text-lg font-semibold p-5 bg-slate-600">
+            <div class="header flex justify-between items-start text-lg font-semibold p-5 bg-slate-600">
                 <div class="title">{title}</div>
                 <button type="button" class="close text-2xl h-6 w-6" on:click={() => shown = !shown}>
                     <Icon name="close" />

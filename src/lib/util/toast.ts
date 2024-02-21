@@ -7,7 +7,11 @@ export const toastMessage = (message: string): ToastSettings => {
         background = 'variant-filled-success';
     }
 
-    if (message.includes('error')) {
+    if (message.includes('warn')) {
+        background = 'variant-filled-warn';
+    }
+
+    if (message.includes('error') || message.includes('fail')) {
         background = 'variant-filled-error';
     }
 

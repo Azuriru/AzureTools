@@ -1,0 +1,12 @@
+{
+    "sidebar.dashboard": "Dashboard",
+    "sidebar.wallets": "Wallets",
+    "wallets.manager": "Wallet Manager",
+    "wallets.add": "Create wallets",
+    "wallets.import": "Import wallets",
+    "wallets.import-label": "Import private keys",
+    "wallets.import-placeholder": "Add your private keys, each on a new line",
+    "wallet.tokens": "Tokens",
+    "wallet.nfts": "NFTs",
+    "wallet.activity": "Activity"
+}

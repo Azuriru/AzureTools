@@ -14,7 +14,7 @@
     <div class="flex text-sm {spacing}">
         <label class="flex flex-grow flex-col">
             {#if label}
-                <div class="capitalize font-semibold mb-2">{label}</div>
+                <div class="font-semibold mb-2">{label}</div>
             {/if}
             <input
                 bind:value
