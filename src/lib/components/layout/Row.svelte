@@ -1,7 +1,7 @@
 <script lang="ts">
     export let name: string = '';
     export let layout: string = '';
-    export let grow: 0 | 1 = 1;
+    export let grow: 0 | 1 | boolean = 1;
     export let shrink: 0 | 1 = 1;
     export let align: 0 | 1 | 2 = 1;
     export let justify: null | 0 | 1 | 2 | 3 | 4 | 5 = null;

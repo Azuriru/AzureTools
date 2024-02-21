@@ -1,42 +1,41 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
+    export let labelClass = '';
     export let value = '';
     export let placeholder = '';
     export let title = '';
-    export let label = '';
-    export let spacing = '';
-    export let background = 'bg-slate-700';
-    export let color = 'placeholder-white/50 disabled:text-white/80 text-white/80';
+    export let type = 'text';
     export let disabled = false;
     export let maxlength: undefined | number = undefined;
+    export let size: undefined | number = undefined;
+    export let autofocus = false;
+    export let hasFocus = autofocus;
+    export let background = 'bg-slate-700';
+    export let color = 'placeholder-white/50 disabled:text-white/80 text-white/80';
+
+    let input: HTMLInputElement;
+    onMount(() => {
+        input.type = type;
+
+        if (autofocus) {
+            input.focus();
+        }
+    });
 </script>
 
-{#if label}
-    <div class="flex text-sm {spacing}">
-        <label class="flex flex-grow flex-col">
-            {#if label}
-                <div class="font-semibold mb-2">{label}</div>
-            {/if}
-            <input
-                bind:value
-                class="flex {background} {color} w-full px-3 py-2 rounded {$$props.class}"
-                type="text"
-                {maxlength}
-                {placeholder}
-                {title}
-                {disabled}
-            />
-        </label>
-    </div>
-{:else}
-    <label class="flex flex-grow">
-        <input
-            bind:value
-            class="flex {background} {color} w-full px-3 py-2 rounded {$$props.class}"
-            type="text"
-            {maxlength}
-            {placeholder}
-            {title}
-            {disabled}
-        />
-    </label>
-{/if}
+<label class="flex {labelClass}">
+    <slot />
+    <input
+        bind:this={input}
+        bind:value
+        on:focus={() => hasFocus = true}
+        on:blur={() => hasFocus = false}
+        class="flex {background} {color} px-3 py-2 rounded {$$props.class}"
+        {placeholder}
+        {title}
+        {disabled}
+        {maxlength}
+        {size}
+    />
+</label>

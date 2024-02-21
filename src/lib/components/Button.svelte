@@ -1,6 +1,7 @@
 <script lang="ts">
-    import Icon from './MaterialSymbol.svelte';
+    import type { MouseEventHandler } from 'svelte/elements';
     import { type MaterialSymbol } from 'material-symbols';
+    import Icon from './MaterialSymbol.svelte';
 
     export let type: 0 | 1 = 1;
     export let thin = 0;
@@ -9,7 +10,7 @@
     export let size = thin ? 'text-sm' : 'text-sm';
     export let layout = '';
     export let icon: MaterialSymbol | undefined = undefined;
-    export let onClick = () => {};
+    export let onClick: MouseEventHandler<HTMLButtonElement> = () => {};
 
     let classes = type
         ? `${width} ${bg} ${thin ? 'py-1 px-3' : 'py-2'} ${layout} rounded ${size}`

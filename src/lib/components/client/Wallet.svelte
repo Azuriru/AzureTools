@@ -21,6 +21,7 @@
 {#if compact}
     <Row
         name="wallet"
+        grow={0}
         shrink={1}
         layout="py-2 px-4 rounded overflow-hidden bg-slate-600"
     >
@@ -30,7 +31,7 @@
                 <MaterialSymbol name="content_copy" />
             </Button>
         </Row>
-        <Divider vertical={1} spacing="mx-3" />
+        <Divider vr={1} spacing="mx-3" />
         <Row name="balance" layout="h-full whitespace-nowrap overflow-hidden">
             {#await getBalance(address)}
                 {$t('wallet.balance-loading')}
@@ -38,7 +39,7 @@
                 <span class="flex-1 text-center">
                     {formatBalance(chain, 0)}
                 </span>
-                <Divider vertical={1} spacing="mx-3" />
+                <Divider vr={1} spacing="mx-3" />
                 <span class="flex-1 text-center text-ellipsis overflow-hidden">
                     ${formatBalance(usdt)}
                 </span>
