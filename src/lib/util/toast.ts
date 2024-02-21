@@ -5,15 +5,15 @@ export const toastMessage = (message: string): ToastSettings => {
     let background: string | undefined;
 
     if (message.includes('success')) {
-        background = 'variant-filled-success';
+        background = 'bg-emerald-500';
     }
 
     if (message.includes('warn')) {
-        background = 'variant-filled-warning';
+        background = 'bg-amber-500';
     }
 
     if (message.includes('error') || message.includes('fail')) {
-        background = 'variant-filled-error';
+        background = 'bg-red-500';
     }
 
     return {
