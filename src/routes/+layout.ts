@@ -8,6 +8,5 @@ export const load: Load = async ({ url }) => {
     const initLocale = locale.get() || get(language);
 
     await loadTranslations(initLocale, url.pathname);
-
     return {};
 };
