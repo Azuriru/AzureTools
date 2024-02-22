@@ -18,9 +18,9 @@
 
     let privateKeyModalShown = false;
     let privateKeyModalSelectedTab = 0;
-    let privateKeysValue = '';
     let privateKeysTarget = '';
     let privateKeysOutput = '';
+    let privateKeysValue = '';
 
     async function onCreate() {
         if (!privateKeysTarget.trim()) {
@@ -34,7 +34,11 @@
         }
 
         privateKeysOutput = new Array(target).fill(null).map(_ => generatePrivateKey()).join('\n');
+    }
+
+    function onCreateMore() {
         privateKeysTarget = '';
+        privateKeysOutput = '';
     }
 
     async function onImport() {
@@ -75,8 +79,6 @@
         }
 
         privateKeyModalShown = false;
-        privateKeyModalSelectedTab = 0;
-        privateKeysValue = '';
     }
 
     async function onImportCreated(createMore = false) {
@@ -87,10 +89,26 @@
             } catch { /* e */ }
         }
 
+        toastStore.trigger(toastMessage('wallets.import-all-success'));
+
         if (!createMore) {
             privateKeyModalShown = false;
         }
+        privateKeysTarget = '';
         privateKeysOutput = '';
+    }
+
+    function onDestroy() {
+        privateKeyModalSelectedTab = 0;
+        privateKeysTarget = '';
+        privateKeysOutput = '';
+        privateKeysValue = '';
+    }
+
+    function onTabChange() {
+        privateKeysTarget = '';
+        privateKeysOutput = '';
+        privateKeysValue = '';
     }
 </script>
 
@@ -102,7 +120,7 @@
     <MaterialSymbol name="add" />
 </Button>
 
-<Modal title={$t('wallets.manage')} shown={privateKeyModalShown}>
+<Modal title={$t('wallets.manage')} bind:shown={privateKeyModalShown} {onDestroy}>
     <TabGroup
         active="text-cyan-400 hover:text-cyan-500 border-b-2 border-cyan-400"
         hover="hover:text-cyan-500"
@@ -111,6 +129,7 @@
         border="border-0"
         padding=""
         class="mb-4 text-sm"
+        on:click={onTabChange}
     >
         {#each tablist as tab, i (tab)}
             <Tab bind:group={privateKeyModalSelectedTab} name={tab} value={i}>
@@ -121,7 +140,7 @@
     {#if privateKeyModalSelectedTab}
         <Textarea
             bind:value={privateKeysValue}
-            class="mb-4"
+            labelClass="mb-4"
             rows={6}
             placeholder={$t('wallets.import-placeholder')}
             label={$t('wallets.import-label')}
@@ -133,13 +152,13 @@
         {#if privateKeysOutput}
             <Textarea
                 bind:value={privateKeysOutput}
-                class="mb-4"
+                labelClass="mb-4"
                 rows={6}
                 placeholder={$t('wallets.output-placeholder')}
                 label={$t('wallets.output-label')}
             />
             <Row>
-                <Button layout="w-1/2 mr-2 mb-4" onClick={() => privateKeysOutput = ''}>
+                <Button layout="w-1/2 mr-2 mb-4" onClick={onCreateMore}>
                     {$t('wallets.create-more')}
                 </Button>
                 <Button layout="w-1/2 mb-4" onClick={() => onImportCreated()}>
@@ -152,7 +171,7 @@
         {:else}
             <Input
                 bind:value={privateKeysTarget}
-                labelClass="flex-col mb-4 text-sm font-semibold"
+                labelClass="flex-col mb-4 font-semibold"
                 class="mt-2 font-normal"
                 type="number"
                 placeholder={$t('wallets.create-placeholder')}
