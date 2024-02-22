@@ -16,6 +16,7 @@
     export let title = '';
     export let width = 'w-96';
     export let height = '';
+    export let onDestroy: () => void = () => {};
 
     let zIndex = -1;
     let wasShown = false;
@@ -64,7 +65,7 @@
 
         return {
             destroy() {
-                node.remove();
+                onDestroy();
             }
         }
     }

@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
 
     export let labelClass = '';
+    export let textSize = 'text-sm';
     export let value = '';
     export let placeholder = '';
     export let title = '';
@@ -24,7 +25,7 @@
     });
 </script>
 
-<label class="flex {labelClass}">
+<label class="flex {textSize} {labelClass}">
     <slot />
     <input
         bind:this={input}
