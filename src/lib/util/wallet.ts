@@ -3,7 +3,7 @@ import { usdtxAbi } from '$lib/util/abi';
 import { contractAddress, publicClient } from './wallets';
 import { formatEther } from 'viem';
 
-type BalanceType = {
+export type BalanceType = {
     chain: bigint;
     usdt: bigint;
 }
