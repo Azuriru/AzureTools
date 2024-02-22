@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
-    import { page } from '$app/stores';
-
-    goto('/');
+    import { Column } from '$lib/components/layout';
 </script>
 
-<h1>{$page.status}: {$page.error?.message}</h1>
+<Column justify={1} align={1} layout="h-full">
+    Work in progress! Stay tuned!
+</Column>
