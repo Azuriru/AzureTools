@@ -1,6 +1,11 @@
 {
     "sidebar.dashboard": "Dashboard",
     "sidebar.wallets": "Wallets",
+    "sidebar.send": "Multisend",
+    "sidebar.market": "Market",
+    "sidebar.analytics": "Analytics",
+    "sidebar.user": "User",
+    "sidebar.settings": "Settings",
     "wallets.manage": "Create or import a wallet",
     "wallets.empty": "You don't seem to have any wallets, create or import some!",
     "wallets.create": "Create",
