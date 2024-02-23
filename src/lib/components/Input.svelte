@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
     export let labelClass = '';
     export let textSize = 'text-sm';
     export let value = '';
@@ -15,20 +13,20 @@
     export let background = 'bg-slate-700';
     export let color = 'placeholder-white/50 disabled:text-white/80 text-white/80';
 
-    let input: HTMLInputElement;
-    onMount(() => {
-        input.type = type;
+    // let input: HTMLInputElement;
+    function onMount(node: HTMLInputElement) {
+        node.type = type;
 
         if (autofocus) {
-            input.focus();
+            node.focus();
         }
-    });
+    }
 </script>
 
 <label class="flex {textSize} {labelClass}">
     <slot />
     <input
-        bind:this={input}
+        use:onMount
         bind:value
         on:focus={() => hasFocus = true}
         on:blur={() => hasFocus = false}

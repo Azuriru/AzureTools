@@ -26,7 +26,7 @@
                 grow={0}
                 shrink={0}
                 justify={1}
-                layout="w-16 text-4xl"
+                layout="w-16 text-3xl"
             >
                 <img src="/logo.png" alt="logo" class="w-12" />
             </Row>
@@ -41,16 +41,16 @@
                     grow={0}
                     shrink={0}
                     justify={1}
-                    layout="w-16 text-4xl"
+                    layout="w-16 text-3xl"
                 >
                     <MaterialSymbol {name} />
                 </Row>
-                <Row name="sidebar-content" layout="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Row name="sidebar-content" layout="-ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Row name="sidebar-title">{$t(title)}</Row>
                     {#if href !== 'dashboard'}
                         <Button
                             type={0}
-                            layout="pinned text-4xl rotate-45"
+                            layout="pinned w-9 h-9 text-2xl rotate-45"
                             bg=""
                             onClick={(e) => {
                                 e.preventDefault();
@@ -75,11 +75,11 @@
                     grow={0}
                     shrink={0}
                     justify={1}
-                    layout="w-16 text-4xl"
+                    layout="w-16 text-3xl"
                 >
                     <MaterialSymbol {name} />
                 </Row>
-                <Row name="sidebar-content" layout="opacity-0 group-hover:opacity-100 transition-opacity">
+                <Row name="sidebar-content" layout="-ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     {$t(title)}
                 </Row>
             </Link>
