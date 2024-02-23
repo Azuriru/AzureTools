@@ -12,6 +12,7 @@
     export let hasFocus = autofocus;
     export let background = 'bg-slate-700';
     export let color = 'placeholder-white/50 disabled:text-white/80 text-white/80';
+    export let padding = 'px-3 py-2';
 
     // let input: HTMLInputElement;
     function onMount(node: HTMLInputElement) {
@@ -30,7 +31,8 @@
         bind:value
         on:focus={() => hasFocus = true}
         on:blur={() => hasFocus = false}
-        class="flex {background} {color} px-3 py-2 rounded {$$props.class}"
+        on:click={(e) => e.preventDefault()}
+        class="flex {background} {color} {padding} rounded {$$props.class}"
         {placeholder}
         {title}
         {disabled}

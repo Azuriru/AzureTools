@@ -1,9 +1,9 @@
-import { browser } from '$app/environment';
 import { createPublicClient, http, type Hex } from 'viem';
 import { bsc, bscTestnet } from 'viem/chains';
-import assert from 'assertmin';
-import { centralizedKey } from './store';
 import { readable } from 'svelte/store';
+import assert from 'assertmin';
+import { browser } from '$app/environment';
+import { centralizedKey } from './store';
 
 export const targetNetwork = process.env.NODE_ENV == 'development' ? bscTestnet : bsc;
 export const contractAddress = '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd';
@@ -19,7 +19,6 @@ interface WalletStack<State, Event> {
     do(event: Event): void;
     add(address: Hex): boolean;
     remove(address: Hex): boolean;
-    import(address: Hex): boolean;
 }
 
 type AddEvent = {
@@ -32,14 +31,19 @@ type RemoveEvent = {
     index: number;
 };
 
-type ImportEvent = {
-    type: 'import';
+type EditEvent = {
+    type: 'edit';
     address: Hex;
-};
+    edited: string;
+}
 
-type Event = AddEvent | RemoveEvent | ImportEvent;
+type Event = AddEvent | RemoveEvent | EditEvent;
 
-export type State = Hex[];
+type Wallet = {
+    name: string;
+    address: Hex;
+}
+export type State = Wallet[];
 
 export class WalletManager implements WalletStack<State | null, Event> {
     setter: (hist: WalletManager) => void;
@@ -80,16 +84,23 @@ export class WalletManager implements WalletStack<State | null, Event> {
         }
     }
 
+    findIndex(address: Hex): number {
+        return this.state.findIndex((wallet) => wallet.address === address);
+    }
+
     do(event: Event) {
         switch (event.type) {
             case 'add':
-                this.state.push(event.address);
+                this.state.push({
+                    name: '',
+                    address: event.address
+                });
                 break;
             case 'remove':
                 this.state.splice(event.index, 1);
                 break;
-            case 'import':
-                this.state.push(event.address);
+            case 'edit':
+                this.state[this.findIndex(event.address)].name = event.edited;
                 break;
             default:
                 assert.unreachable(event);
@@ -102,7 +113,7 @@ export class WalletManager implements WalletStack<State | null, Event> {
     }
 
     add(address: Hex): boolean {
-        if (this.state.includes(address)) return false;
+        if (this.findIndex(address) !== -1) return false;
 
         this.do({
             type: 'add',
@@ -113,24 +124,13 @@ export class WalletManager implements WalletStack<State | null, Event> {
     }
 
     remove(address: Hex): boolean {
-        const index = this.state.indexOf(address);
+        const index = this.findIndex(address);
 
         if (index === -1) return false;
 
         this.do({
             type: 'remove',
             index
-        });
-
-        return true;
-    }
-
-    import(address: Hex): boolean {
-        if (this.state.includes(address)) return false;
-
-        this.do({
-            type: 'import',
-            address
         });
 
         return true;
@@ -143,4 +143,4 @@ export const wallets = readable<WalletManager>(null as never, (set) => {
 });
 
 // Dev
-console.log('Target network:', targetNetwork.name);
+// console.log('Target network:', targetNetwork.name);

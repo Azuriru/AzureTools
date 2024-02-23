@@ -6,7 +6,7 @@
 
 <Row name="tools" layout="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 auto-rows-[500px] rounded gap-2">
     {#if $pinned.wallets}
-        <Wallets compact={1} dashboard={1} />
+        <Wallets compact={0} dashboard={1} />
     {/if}
     {#if $pinned.send}
         <Multisend />

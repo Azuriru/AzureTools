@@ -58,7 +58,8 @@
             }
 
             try {
-                if ($wallets.import(privateKeyToAccount(privateKey as Hex).address)) {
+                if (privateKeyToAccount(privateKey as Hex).address) {
+                    $wallets.add(privateKey as Hex);
                     importErrors--;
                 } else {
                     importDuplicates++;
@@ -85,7 +86,9 @@
         let privateKeys = privateKeysOutput.trim().split('\n');
         for (let privateKey of privateKeys) {
             try {
-                $wallets.import(privateKeyToAccount(privateKey as Hex).address)
+                if (privateKeyToAccount(privateKey as Hex).address) {
+                    $wallets.add(privateKey as Hex);
+                }
             } catch { /* e */ }
         }
 
