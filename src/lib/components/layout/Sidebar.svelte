@@ -34,8 +34,8 @@
         </Row>
         {#each sidebarItemsStart as item (item)}
             {@const [ name, title ] = item}
-            {@const href = title.slice(8)}
-            <Link {href} layout="sidebar-item flex items-center min-w-60 h-14 pr-3 py-2 opacity-60 hover:opacity-100 transition-opacity select-none">
+            {@const href = `${title.slice(8)}`}
+            <Link href="/{href}" layout="sidebar-item flex items-center min-w-60 h-14 pr-3 py-2 opacity-60 hover:opacity-100 transition-opacity select-none">
                 <Row
                     name="sidebar-icon"
                     grow={0}
@@ -69,7 +69,7 @@
         {#each sidebarItemsEnd as item (item)}
             {@const [ name, title ] = item}
             {@const href = title.slice(8)}
-            <Link {href} layout="sidebar-item flex items-center min-w-60 h-14 pr-3 py-2 opacity-60 hover:opacity-100 transition-opacity select-none">
+            <Link href="/{href}" layout="sidebar-item flex items-center min-w-60 h-14 pr-3 py-2 opacity-60 hover:opacity-100 transition-opacity select-none">
                 <Row
                     name="sidebar-icon"
                     grow={0}

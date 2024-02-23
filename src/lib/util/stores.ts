@@ -1,3 +1,4 @@
+import { writable } from 'svelte/store';
 import { persistible } from './store';
 
 type PinnedItemsType = {
@@ -9,3 +10,5 @@ type PinnedItemsType = {
 export const pinned = persistible<PinnedItemsType>('pinned', {
     wallets: true
 });
+
+export const masterKey = writable<string>('password');

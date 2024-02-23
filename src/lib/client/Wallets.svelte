@@ -9,7 +9,6 @@
     export let dashboard: 0 | 1 = 0;
 </script>
 
-<!-- Todo make a third compact grid??? -->
 {#if $wallets.state.length}
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
@@ -50,6 +49,7 @@
                 name="wallet-list"
                 layout={isCompact}
                 shrink={0}
+                grow={0}
             >
                 {#if compact}
                     <Row
@@ -74,8 +74,8 @@
                         <Row name="empty" grow={0} layout="w-6 flex-shrink-0" />
                     </Row>
                 {/if}
-                {#each $wallets.state as address (address)}
-                    <Wallet {address} {dashboard} {compact} />
+                {#each $wallets.state as { name, address } (address)}
+                    <Wallet {name} privateKey={address} {dashboard} {compact} />
                 {/each}
             </Column>
         </Column>
