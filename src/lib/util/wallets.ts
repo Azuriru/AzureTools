@@ -88,6 +88,10 @@ export class WalletManager implements WalletStack<State | null, Event> {
         return this.state.findIndex((wallet) => wallet.address === address);
     }
 
+    get privateKeys() {
+        return this.state.map(({ address }) => address);
+    }
+
     do(event: Event) {
         switch (event.type) {
             case 'add':
