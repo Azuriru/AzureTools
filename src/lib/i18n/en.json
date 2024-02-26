@@ -19,6 +19,10 @@
     "wallets.output-placeholder": "Generated private keys will appear here",
     "wallets.import": "Import",
     "wallets.import-label": "Import private keys",
+    "wallets.export": "Export",
+    "wallets.export-label": "Here are your freshly exported private keys! Keep them safe!",
+    "wallets.export-prompt": "To export your private keys, please input the master key.",
+    "wallets.export-prompt-placeholder": "Enter your master key here",
     "wallets.import-placeholder": "Add your private keys, each on a new line",
     "wallets.import-all-error-empty": "There's nothing to import!",
     "wallets.import-all-success": "All wallets successfully imported!",
@@ -29,5 +33,6 @@
     "wallet.balance-loading": "Loading balance...",
     "wallet.tokens": "Tokens",
     "wallet.nfts": "NFTs",
-    "wallet.activity": "Activity"
+    "wallet.activity": "Activity",
+    "generic.done": "Done"
 }
