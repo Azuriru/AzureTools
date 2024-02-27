@@ -6,6 +6,14 @@
     "sidebar.analytics": "Analytics",
     "sidebar.user": "User",
     "sidebar.settings": "Settings",
+    "auth.create-user": "Create a user",
+    "auth.create-user-new": "Create a new user",
+    "auth.username": "Username",
+    "auth.password": "Password",
+    "auth.username-empty": "Username cannot be empty",
+    "auth.password-empty": "Password cannot be empty",
+    "auth.password-incorrect": "Password is incorrect",
+    "auth.or": "or",
     "wallets.manage": "Create or import a wallet",
     "wallets.empty": "You don't seem to have any wallets, create or import some!",
     "wallets.create": "Create",
@@ -34,5 +42,7 @@
     "wallet.tokens": "Tokens",
     "wallet.nfts": "NFTs",
     "wallet.activity": "Activity",
+    "generic.create": "Create",
+    "generic.login": "Login",
     "generic.done": "Done"
 }
