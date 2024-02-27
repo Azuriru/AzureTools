@@ -39,7 +39,7 @@ type EditEvent = {
 
 type Event = AddEvent | RemoveEvent | EditEvent;
 
-type Wallet = {
+export type Wallet = {
     name: string;
     address: Hex;
 }

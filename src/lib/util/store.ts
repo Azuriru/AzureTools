@@ -68,7 +68,7 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
         }
     }
 
-    return proxyStore(initial, source => {
+    const proxy = proxyStore(initial, source => {
         return {
             set(newValue) {
                 data[localKey] = newValue;
@@ -86,4 +86,6 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
             }
         };
     });
+
+    return proxy;
 };
