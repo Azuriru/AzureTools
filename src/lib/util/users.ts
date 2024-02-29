@@ -32,8 +32,17 @@ type User = {
 
 export type Users = User[];
 export const users = persistible<Users>('users', []);
-export const currentSession = persistible<User['id'] | null>('session', null);
+export const currentSession = persistible<string | null>('session', null);
 export const currentUser = writable<User | null>(null);
+
+export const currentUserUnsub = currentUser.subscribe((cu) => {
+    users.update(users => users);
+    console.log('cu updated, users updated')
+});
+
+currentSession.subscribe(c => {
+    console.log('sessh update', c);
+});
 
 function createUser(name: string, password: string): User {
     const id = `${CryptoES.MD5(Date.now() + name)}`;
@@ -67,5 +76,6 @@ export function setUser(index: number) {
 }
 
 export function unsetUser() {
-    currentSession.set(null);
+    console.log('unset');
+    // currentSession.set(null);
 }

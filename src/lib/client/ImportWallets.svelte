@@ -5,7 +5,7 @@
     import { startsWith } from '$lib/util';
     import { t } from '$lib/i18n';
     import { toastMessage } from '$lib/util/toast';
-    import { wallets } from '$lib/util/wallets';
+    import { add } from '$lib/util/wallets';
     import { MaterialSymbol, Button, Textarea, Modal, Input } from '$lib/components';
     import { Row } from '$lib/components/layout';
     import { generatePrivateKey } from 'viem/accounts';
@@ -59,7 +59,7 @@
 
             try {
                 if (privateKeyToAccount(privateKey as Hex).address) {
-                    $wallets.add(privateKey as Hex);
+                    add(privateKey as Hex);
                     importErrors--;
                 } else {
                     importDuplicates++;
@@ -87,7 +87,7 @@
         for (let privateKey of privateKeys) {
             try {
                 if (privateKeyToAccount(privateKey as Hex).address) {
-                    $wallets.add(privateKey as Hex);
+                    add(privateKey as Hex);
                 }
             } catch { /* e */ }
         }
@@ -117,6 +117,7 @@
 
 <Button
     type={0}
+    bg="bg-cyan-500"
     layout="w-16 h-16 fixed bottom-8 right-8 z-10 shadow-xl rounded-full text-5xl"
     onClick={() => privateKeyModalShown = !privateKeyModalShown}
 >

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { type Hex } from 'viem';
     import { t } from '$lib/i18n';
-    import { wallets } from '$lib/util/wallets';
+    import { remove } from '$lib/util/wallets';
     import { Wallet } from '$lib/util/wallet';
     import { Row, Column } from '$lib/components/layout';
     import { Button, Divider, Link, MaterialSymbol } from '$lib/components';
@@ -10,7 +10,7 @@
     import Input from '../Input.svelte';
 
     export let selectedTab = 0;
-    export let name: string;
+    export let name: string = '';
     export let privateKey: Hex;
     export let compact: 0 | 1 = 0;
     export let dashboard: 0 | 1 = 0;
@@ -31,7 +31,7 @@
     >
         <Row name="address" grow={0} layout="w-2/5">
             <span class="flex-1 overflow-hidden text-ellipsis text-sm">{address}</span>
-            <Button type={0} bg="" layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
+            <Button type={0} layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
                 <MaterialSymbol name="content_copy" />
             </Button>
         </Row>
@@ -49,7 +49,7 @@
                 </span>
             {/await}
         </Row>
-        <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.preventDefault(), $wallets.remove(privateKey))}>
+        <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.preventDefault(), remove(privateKey))}>
             <MaterialSymbol name="close" />
         </Button>
     </Link>
@@ -68,13 +68,13 @@
                 bind:value={name}
                 placeholder={$t('wallet.name-placeholder')}
             />
-            <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" bg="" onClick={(e) => (e.preventDefault(), $wallets.remove(privateKey))}>
+            <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.preventDefault(), remove(privateKey))}>
                 <MaterialSymbol name="close" />
             </Button>
         </Row>
         <Row name="address" layout="w-full mb-2">
             <span class="flex-1 overflow-hidden text-ellipsis text-xs">{address}</span>
-            <Button type={0} bg="" layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
+            <Button type={0} layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
                 <MaterialSymbol name="content_copy" />
             </Button>
         </Row>
@@ -101,7 +101,7 @@
         layout="wallet flex flex-col flex-grow justify-center items-center px-8 py-4 rounded overflow-hidden bg-slate-600 space-y-3"
         href="/wallets/{address}"
     >
-        <Button type={0} layout="w-6 h-6 text-xl self-end" onClick={(e) => (e.preventDefault(), $wallets.remove(privateKey))}>
+        <Button type={0} layout="w-6 h-6 text-xl self-end" onClick={(e) => (e.preventDefault(), remove(privateKey))}>
             <MaterialSymbol name="close" />
         </Button>
         <Column name="balance" align={1} layout="!mt-0 h-16">
@@ -120,7 +120,7 @@
         </Column>
         <Row name="address" layout="w-full py-1 pl-3 pr-2 rounded-full bg-cyan-900">
             <span class="flex-1 overflow-hidden text-ellipsis text-xs">{address}</span>
-            <Button type={0} bg="" layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
+            <Button type={0} layout="text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
                 <MaterialSymbol name="content_copy" />
             </Button>
         </Row>
