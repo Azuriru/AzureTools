@@ -85,13 +85,17 @@
     <Input disabled={selectedUser > -1} bind:value={usernameValue} labelClass="has-[:disabled]:opacity-50 flex-col mb-4" class="mt-1 transition bg-transparent border-2 border-solid border-white/30 hover:border-white/40 focus:border-white/60 placeholder-gray-400 {usernameError ? 'border-red-400' : ''}">
         <Row justify={3}>
             {$t('auth.username')}
-            <span class="text-red-400 text-xs normal-case">{$t(usernameError)}</span>
+            {#if usernameError}
+                <span class="text-red-400 text-xs normal-case">{$t(usernameError)}</span>
+            {/if}
         </Row>
     </Input>
     <Input bind:value={passwordValue} labelClass="flex-col mb-6" class="mt-1 transition bg-transparent border-2 border-solid border-white/30 hover:border-white/40 focus:border-white/60 placeholder-gray-400 {passwordError ? 'border-red-400' : ''}">
         <Row justify={3}>
             {$t('auth.password')}
-            <span class="text-red-400 text-xs normal-case">{$t(passwordError)}</span>
+            {#if passwordError}
+                <span class="text-red-400 text-xs normal-case">{$t(passwordError)}</span>
+            {/if}
         </Row>
     </Input>
     {#if selectedUser > -1}

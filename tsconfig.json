@@ -12,6 +12,6 @@
 		"sourceMap": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"verbatimModuleSyntax": false,
+		"verbatimModuleSyntax": true
 	},
 }
