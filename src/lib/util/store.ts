@@ -1,4 +1,4 @@
-import { writable, get, type Subscriber, type Unsubscriber, type Updater, type Writable, type StartStopNotifier } from 'svelte/store';
+import { writable, type Subscriber, type Unsubscriber, type Updater, type Writable, type StartStopNotifier } from 'svelte/store';
 import { browser } from '$app/environment';
 
 type TransitioningTypes = ((res: void) => void) | null;
@@ -71,13 +71,9 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
     const proxy = proxyStore(initial, source => {
         return {
             set(newValue) {
-                data[localKey] = newValue;
-                if (browser) { localStorage.setItem(centralizedKey, JSON.stringify(data)); }
                 return source.set(newValue);
             },
             update(updater) {
-                data[localKey] = updater(get(source));
-                if (browser) { localStorage.setItem(centralizedKey, JSON.stringify(data)); }
                 return source.update(updater);
             },
             subscribe: (callback) => source.subscribe(callback),
@@ -85,6 +81,13 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
                 set(data[localKey]);
             }
         };
+    });
+
+    proxy.subscribe(val => {
+        data[localKey] = val;
+        if (browser) {
+            localStorage.setItem(centralizedKey, JSON.stringify(data));
+        }
     });
 
     return proxy;

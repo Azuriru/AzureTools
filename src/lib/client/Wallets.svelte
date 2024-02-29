@@ -4,6 +4,7 @@
     import { Row, Column } from '$lib/components/layout';
     import { Wallet } from '$lib/components/client';
     import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
+    import { currentUser } from '$lib/util/users';
 
     export let compact: 0 | 1 = 0;
     export let dashboard: 0 | 1 = 0;
@@ -12,7 +13,7 @@
     let exportKeysShown = false;
 </script>
 
-{#if $wallets.state.length}
+{#if $currentUser?.wallets.length}
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
         {@const border = dashboard ? '' : 'rounded border-2 border-slate-600'}

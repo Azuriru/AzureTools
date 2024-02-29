@@ -13,10 +13,7 @@ const message = 'Hello, world!';
 const encryptedMessage = CryptoES.AES.encrypt(message, secretKey).toString();
 
 // Decrypting the message
-const decryptedMessage = CryptoES.AES.decrypt(encryptedMessage, secretKey).toString(CryptoES.enc.Utf8);
-
-console.log(`Encrypted Message: ${encryptedMessage}`);
-console.log(`Decrypted Message: ${decryptedMessage}`);
+const _decryptedMessage = CryptoES.AES.decrypt(encryptedMessage, secretKey).toString(CryptoES.enc.Utf8);
 
 type PinnedItemsType = {
     wallets?: boolean;
@@ -35,6 +32,7 @@ type User = {
 
 export type Users = User[];
 export const users = persistible<Users>('users', []);
+export const currentSession = persistible<User['id'] | null>('session', null);
 export const currentUser = writable<User | null>(null);
 
 function createUser(name: string, password: string): User {
@@ -51,9 +49,10 @@ function createUser(name: string, password: string): User {
 }
 
 export function addUser(name: string, password: string) {
-    const newUsers = get(users);
-    newUsers.push(createUser(name, password));
-    users.set(newUsers);
+    users.update(users => {
+        users.push(createUser(name, password));
+        return users;
+    });
 }
 
 export function removeUser(id: string) {
@@ -64,5 +63,9 @@ export function removeUser(id: string) {
 }
 
 export function setUser(index: number) {
-    currentUser.set(get(users)[index]);
+    currentSession.set(get(users)[index].id);
+}
+
+export function unsetUser() {
+    currentSession.set(null);
 }
