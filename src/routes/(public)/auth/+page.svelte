@@ -39,7 +39,6 @@
         }
 
         setUser(selectedUser);
-
         goto('/dashboard');
     }
 
@@ -63,6 +62,9 @@
         usernameValue = '';
         passwordValue = '';
         selectedUser = $users.length - 1;
+
+        setUser(selectedUser);
+        goto('/dashboard');
     }
 
     onMount(() => {

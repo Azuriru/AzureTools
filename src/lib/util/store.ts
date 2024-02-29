@@ -54,19 +54,26 @@ export const localStorageBacked = function<T>(key: string, initial: T) {
     });
 };
 
+
 export const centralizedKey = 'azuretools-persistibles';
+
+let data: Record<string, any> | null;
 export type JSONValue = null | boolean | number | string | JSONValue[] | { [k: string]: JSONValue };
 export const persistible = function<T extends JSONValue>(localKey: string, initial: T): StoreContract<T> {
-    let data: Record<string, T> = {};
 
-    data[localKey] = initial;
-    if (browser) {
+    if (browser && data === null) {
         const stored = localStorage.getItem(centralizedKey);
 
         if (stored !== null) {
-            data = Object.assign(data, JSON.parse(stored))
+            data = (JSON.parse(stored) as null as never) ?? {};
+        } else {
+            data = {};
         }
+    } else {
+        data = {};
     }
+
+    data[localKey] = initial;
 
     const proxy = proxyStore(initial, source => {
         return {
@@ -78,13 +85,14 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
             },
             subscribe: (callback) => source.subscribe(callback),
             init: (set) => {
-                set(data[localKey]);
+                if (data) set(data[localKey]);
             }
         };
     });
 
     proxy.subscribe(val => {
-        data[localKey] = val;
+        if (data) data[localKey] = val;
+
         if (browser) {
             localStorage.setItem(centralizedKey, JSON.stringify(data));
         }
