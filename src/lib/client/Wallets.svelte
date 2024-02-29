@@ -1,6 +1,5 @@
 <script lang="ts">
     import { t } from '$lib/i18n';
-    import { wallets } from '$lib/util/wallets';
     import { Row, Column } from '$lib/components/layout';
     import { Wallet } from '$lib/components/client';
     import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
@@ -109,8 +108,8 @@
                         <Row name="empty" grow={0} layout="w-6 flex-shrink-0" />
                     </Row>
                 {/if}
-                {#each $wallets.state as { name, address } (address)}
-                    <Wallet {name} privateKey={address} {dashboard} {compact} />
+                {#each $currentUser.wallets as address (address)}
+                    <Wallet privateKey={address} {dashboard} {compact} />
                 {/each}
             </Column>
         </Column>
@@ -143,7 +142,7 @@
     <Textarea
         labelClass="flex-col text-sm font-semibold mb-4"
         class="mt-2 font-normal"
-        value={$wallets.privateKeys.join('\n')}
+        value={$currentUser?.wallets.join('\n')}
     >
         {$t('wallets.export-label')}
     </Textarea>
