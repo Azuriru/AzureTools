@@ -35,11 +35,9 @@ export const users = persistible<Users>('users', []);
 export const currentSession = persistible<string | null>('session', null);
 export const currentUser = writable<User | null>(null);
 
-export const currentUserUnsub = currentUser.subscribe((user) => {
+export const currentUserUnsub = currentUser.subscribe(() => {
     users.update(users => users);
 });
-
-currentSession.subscribe(v => console.log('currentSession updated:', v));
 
 function createUser(name: string, password: string): User {
     const id = `${CryptoES.MD5(Date.now() + name)}`;
@@ -69,7 +67,6 @@ export function removeUser(id: string) {
 }
 
 export function setUser(index: number) {
-    console.log(`set ${get(users)[index].id}`);
     currentSession.set(get(users)[index].id);
 }
 
