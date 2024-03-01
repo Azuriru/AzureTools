@@ -3,18 +3,6 @@ import type { Wallet } from './wallets';
 import { persistible } from './store';
 import { get, writable } from 'svelte/store';
 
-// Your secret key
-const secretKey = 'your-secret-key';
-
-// The message you want to encrypt
-const message = 'Hello, world!';
-
-// Encrypting the message
-const encryptedMessage = CryptoES.AES.encrypt(message, secretKey).toString();
-
-// Decrypting the message
-const _decryptedMessage = CryptoES.AES.decrypt(encryptedMessage, secretKey).toString(CryptoES.enc.Utf8);
-
 type PinnedItemsType = {
     wallets?: boolean;
     send?: boolean;
@@ -38,6 +26,10 @@ export const currentUser = writable<User | null>(null);
 export const currentUserUnsub = currentUser.subscribe(() => {
     users.update(users => users);
 });
+
+export function hash(string: string) {
+    return `${CryptoES.SHA256(string)}`;
+}
 
 function createUser(name: string, password: string): User {
     const id = `${CryptoES.MD5(Date.now() + name)}`;

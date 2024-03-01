@@ -2,8 +2,8 @@
     import type { Hex } from 'viem';
     import { privateKeyToAccount } from 'viem/accounts';
     import { Tab, TabGroup, getToastStore } from '@skeletonlabs/skeleton';
-    import { startsWith } from '$lib/util';
     import { t } from '$lib/i18n';
+    import { copy, startsWith } from '$lib/util';
     import { toastMessage } from '$lib/util/toast';
     import { add } from '$lib/util/wallets';
     import { MaterialSymbol, Button, Textarea, Modal, Input } from '$lib/components';
@@ -161,12 +161,15 @@
                 placeholder={$t('wallets.output-placeholder')}
                 label={$t('wallets.output-label')}
             />
-            <Row>
-                <Button layout="w-1/2 mr-2 mb-4" onClick={onCreateMore}>
+            <Row layout="mb-3 space-x-3">
+                <Button width="w-full" onClick={onCreateMore}>
                     {$t('wallets.create-more')}
                 </Button>
-                <Button layout="w-1/2 mb-4" onClick={() => onImportCreated()}>
+                <Button width="w-full" onClick={() => onImportCreated()}>
                     {$t('wallets.import')}
+                </Button>
+                <Button width="w-9 flex-shrink-0" layout="text-xl px-0 h-9" onClick={() => copy(privateKeysOutput)}>
+                    <MaterialSymbol name="content_copy" />
                 </Button>
             </Row>
             <Button onClick={() => onImportCreated(true)}>
