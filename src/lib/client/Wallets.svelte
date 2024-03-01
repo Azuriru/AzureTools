@@ -1,15 +1,45 @@
 <script lang="ts">
+    import { getToastStore } from '@skeletonlabs/skeleton';
     import { t } from '$lib/i18n';
+    import { copy } from '$lib/util';
+    import { toastMessage } from '$lib/util/toast';
+    import { currentUser, hash } from '$lib/util/users';
+    import { decrypt } from '$lib/util/wallets';
+    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
     import { Wallet } from '$lib/components/client';
-    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
-    import { currentUser } from '$lib/util/users';
 
     export let compact: 0 | 1 = 0;
     export let dashboard: 0 | 1 = 0;
 
+    const toastStore = getToastStore();
+
+    let exportPassword = '';
+    let exportKeys = '';
     let exportShown = false;
     let exportKeysShown = false;
+
+    function onExport() {
+        if (!$currentUser) return;
+        const { wallets, password } = $currentUser;
+
+        if (!exportPassword.trim()) {
+            return toastStore.trigger(toastMessage('wallets.export-error-empty'));
+        }
+
+        if (password !== hash(exportPassword.trim())) {
+            return toastStore.trigger(toastMessage('wallets.export-error-incorrect'));
+        }
+
+        toastStore.trigger(toastMessage('wallets.export-success'));
+
+        exportKeys = wallets
+            .map(hash => decrypt(hash, password))
+            .join('\n');
+        exportPassword = '';
+        exportKeysShown = true;
+        exportShown = false;
+    }
 </script>
 
 {#if $currentUser?.wallets.length}
@@ -89,27 +119,22 @@
                         layout="py-2 px-4 rounded bg-slate-600"
                     >
                         <Row name="address" grow={0} layout="w-2/5">
-                            <span class="flex-1 overflow-hidden text-ellipsis"
-                            >Address</span
-                            >
+                            <span class="flex-1 overflow-hidden text-ellipsis">Address</span>
                         </Row>
                         <Divider vr={1} spacing="mx-3" />
                         <Row
                             name="balance"
                             layout="h-full whitespace-nowrap overflow-hidden"
                         >
-                            <span class="flex-1 text-center"> BNB </span>
+                            <span class="flex-1 text-center">BNB</span>
                             <Divider vr={1} spacing="mx-3" />
-                            <span class="flex-1 text-center text-ellipsis overflow-hidden"
-                            >
-                                USDT
-                            </span>
+                            <span class="flex-1 text-center text-ellipsis overflow-hidden">USDT</span>
                         </Row>
                         <Row name="empty" grow={0} layout="w-6 flex-shrink-0" />
                     </Row>
                 {/if}
                 {#each $currentUser.wallets as address (address)}
-                    <Wallet privateKey={address} {dashboard} {compact} />
+                    <Wallet privateKey={decrypt(address, $currentUser.password)} {dashboard} {compact} />
                 {/each}
             </Column>
         </Column>
@@ -128,25 +153,28 @@
 
 <Modal bind:shown={exportShown} title={$t('wallets.export')}>
     <Input
+        bind:value={exportPassword}
         labelClass="text-sm flex-col font-semibold mb-4"
         class="mt-2 font-normal"
+        placeholder={$t('wallets.export-prompt-placeholder')}
     >
         {$t('wallets.export-prompt')}
     </Input>
-    <Button onClick={() => ((exportKeysShown = true), (exportShown = false))}
-    >{$t('wallets.export')}</Button
-    >
+    <Button onClick={onExport}>{$t('wallets.export')}</Button>
 </Modal>
 
 <Modal bind:shown={exportKeysShown} title={$t('wallets.export')}>
     <Textarea
         labelClass="flex-col text-sm font-semibold mb-4"
         class="mt-2 font-normal"
-        value={$currentUser?.wallets.join('\n')}
+        bind:value={exportKeys}
     >
         {$t('wallets.export-label')}
     </Textarea>
-    <Button onClick={() => (exportKeysShown = false)}
-    >{$t('generic.done')}</Button
-    >
+    <Row>
+        <Button onClick={() => (exportKeysShown = false)}>{$t('generic.done')}</Button>
+        <Button width="w-9 flex-shrink-0" layout="text-xl ml-2 px-0 h-9" onClick={() => copy(exportKeys)}>
+            <MaterialSymbol name="content_copy" />
+        </Button>
+    </Row>
 </Modal>
