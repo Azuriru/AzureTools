@@ -55,10 +55,12 @@
                             onClick={(e) => {
                                 e.preventDefault();
 
-                                $currentUser.pinned[href] = !$currentUser.pinned[href];
+                                if ($currentUser) {
+                                    $currentUser.pinned[href] = !$currentUser.pinned[href];
+                                }
                             }}
                         >
-                            <MaterialSymbol name="push_pin" fill={$currentUser.pinned[href]} />
+                            <MaterialSymbol name="push_pin" fill={$currentUser?.pinned[href]} />
                         </Button>
                     {/if}
                 </Row>

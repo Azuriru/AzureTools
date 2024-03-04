@@ -1,7 +1,6 @@
 import { type Hex } from 'viem';
 import { writable } from 'svelte/store';
 import { type Wallet, encrypt } from '../wallets';
-import { clients } from './wallets';
 
 type PinnedItemsType = {
     wallets?: boolean;
@@ -19,7 +18,7 @@ export type User = {
     networks: number;
 }
 
-export const currentUser = writable<User>(null as never);
+export const currentUser = writable<User | null>(null);
 
 export function addWallet(privateKey: string) {
     currentUser.update(user => {
