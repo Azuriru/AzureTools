@@ -29,6 +29,7 @@
 		"eslint-plugin-promise": "^6.1.1",
 		"eslint-plugin-svelte": "^2.35.1",
 		"eslint-plugin-svelte-stylistic": "^0.0.4",
+		"ky": "^1.2.2",
 		"material-symbols": "^0.15.0",
 		"postcss": "^8.4.32",
 		"postcss-import": "^16.0.1",
@@ -45,5 +46,8 @@
 		"viem": "^2.7.10",
 		"vite": "^5.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"alchemy-sdk": "^3.1.2"
+	}
 }

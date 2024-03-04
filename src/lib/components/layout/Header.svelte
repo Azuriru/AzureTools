@@ -2,7 +2,7 @@
     import Row from './Row.svelte';
     import Button from '../Button.svelte';
     import MaterialSymbol from '../MaterialSymbol.svelte';
-    import { unsetUser } from '$lib/util/users';
+    import { unsetUser } from '$lib/util/client/users';
     import { goto } from '$app/navigation';
 
     function logout() {

@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import CryptoES from 'crypto-es';
     import { t } from '$lib/i18n';
-    import { users, addUser, setUser } from '$lib/util/users';
+    import { users, addUser, setUser } from '$lib/util/client/users';
     import { Button, Divider, Input } from '$lib/components';
     import { Column, Row } from '$lib/components/layout';
     import { goto } from '$app/navigation';
@@ -38,7 +38,7 @@
             return passwordError = 'auth.password-incorrect';
         }
 
-        setUser(selectedUser);
+        setUser($users[selectedUser].id);
         goto('/dashboard');
     }
 
@@ -63,7 +63,7 @@
         passwordValue = '';
         selectedUser = $users.length - 1;
 
-        setUser(selectedUser);
+        setUser($users[selectedUser].id);
         goto('/dashboard');
     }
 

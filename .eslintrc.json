@@ -75,6 +75,15 @@
                 "functions": "never"
             }
         ],
+        "@stylistic/js/quote-props": [
+            "warn",
+            "as-needed",
+            {
+                "keywords": true,
+                "unnecessary": true,
+                "numbers": true
+            }
+        ],
         // Possible errors
         "svelte/infinite-reactive-loop": "warn",
         "svelte/no-dom-manipulating": "warn",
