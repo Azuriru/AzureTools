@@ -58,7 +58,7 @@
 
 <svelte:window on:click={onClick} />
 
-{#if $currentUser.wallets.length}
+{#if $currentUser?.wallets.length}
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
         {@const border = dashboard ? '' : 'rounded border-2 border-slate-600'}
