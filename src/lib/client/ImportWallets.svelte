@@ -5,7 +5,7 @@
     import { t } from '$lib/i18n';
     import { copy, startsWith } from '$lib/util';
     import { toastMessage } from '$lib/util/toast';
-    import { add } from '$lib/util/wallets';
+    import { addWallet } from '$lib/util/client/user';
     import { MaterialSymbol, Button, Textarea, Modal, Input } from '$lib/components';
     import { Row } from '$lib/components/layout';
     import { generatePrivateKey } from 'viem/accounts';
@@ -59,7 +59,7 @@
 
             try {
                 if (privateKeyToAccount(privateKey as Hex).address) {
-                    add(privateKey as Hex);
+                    addWallet(privateKey as Hex);
                     importErrors--;
                 } else {
                     importDuplicates++;
@@ -87,7 +87,7 @@
         for (let privateKey of privateKeys) {
             try {
                 if (privateKeyToAccount(privateKey as Hex).address) {
-                    add(privateKey as Hex);
+                    addWallet(privateKey as Hex);
                 }
             } catch { /* e */ }
         }

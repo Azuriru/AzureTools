@@ -45,6 +45,7 @@
     "wallet.tokens": "Tokens",
     "wallet.nfts": "NFTs",
     "wallet.activity": "Activity",
+    "wallet.address": "Address",
     "generic.create": "Create",
     "generic.login": "Login",
     "generic.done": "Done"

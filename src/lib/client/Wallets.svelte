@@ -3,7 +3,8 @@
     import { t } from '$lib/i18n';
     import { copy } from '$lib/util';
     import { toastMessage } from '$lib/util/toast';
-    import { currentUser, hash } from '$lib/util/users';
+    import { hash } from '$lib/util/client/users';
+    import { currentUser } from '$lib/util/client/user';
     import { decrypt } from '$lib/util/wallets';
     import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
@@ -40,9 +41,24 @@
         exportKeysShown = true;
         exportShown = false;
     }
+
+    let networksVisible = false;
+    function openDropdown() {
+        networksVisible = !networksVisible;
+    }
+
+    function onClick(e: MouseEvent) {
+        const target = e.target as Element;
+
+        if (!target.closest('.networks')) {
+            networksVisible = false;
+        }
+    }
 </script>
 
-{#if $currentUser?.wallets.length}
+<svelte:window on:click={onClick} />
+
+{#if $currentUser.wallets.length}
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
         {@const border = dashboard ? '' : 'rounded border-2 border-slate-600'}
@@ -66,60 +82,65 @@
                     <MaterialSymbol name="search" />
                 </Row>
             </Input>
-            <Row name="view" grow={0} layout="h-full rounded {border}">
-                <Button
-                    onClick={() => (exportShown = true)}
-                    type={0}
-                    bg=""
-                    layout={mini}
-                >
-                    <MaterialSymbol name="upload_file" fill={dashboard} />
-                </Button>
-                {#if !dashboard}
-                    <Divider vr={1} color="border-slate-600" spacing="" />
-                {/if}
-                <Button
-                    onClick={() => (compact = 1)}
-                    type={0}
-                    bg=""
-                    layout={mini}
-                >
-                    <MaterialSymbol
-                        name={dashboard ? 'table_rows' : 'menu'}
-                        fill={dashboard}
-                    />
-                </Button>
-                {#if !dashboard}
-                    <Divider vr={1} color="border-slate-600" spacing="" />
-                {/if}
-                <Button
-                    onClick={() => (compact = 0)}
-                    type={0}
-                    bg=""
-                    layout={mini}
-                >
-                    <MaterialSymbol name="grid_view" fill={dashboard} />
-                </Button>
+            <Row grow={0} name="controls-right" layout="h-full">
+                <Row name="networks" align={undefined} layout="!block h-full w-48 relative mr-2">
+                    <Button type={0} layout="h-full w-full rounded border-solid {border}" onClick={openDropdown}>
+                        lotta nets
+                    </Button>
+                    <Column name="networks-list" layout="fixed {networksVisible ? '' : 'hidden'} bg-slate-900 w-48 z-10 overflow-hidden mt-2">
+                        <!-- {#if $clients.length}
+                            {#each $clients as client (client.uid)}
+                                <button type="button" class="option flex items-center px-4 hover:bg-white/10">{client.chain?.name || 'unknown'}</button>
+                            {/each}
+                        {/if} -->
+                    </Column>
+                </Row>
+                <Row name="view" grow={0} layout="h-full rounded {border}">
+                    <Button
+                        onClick={() => (exportShown = true)}
+                        type={0}
+                        bg=""
+                        layout={mini}
+                    >
+                        <MaterialSymbol name="upload_file" fill={dashboard} />
+                    </Button>
+                    {#if !dashboard}
+                        <Divider vr={1} color="border-slate-600" spacing="" />
+                        <Button
+                            onClick={() => (compact = 1)}
+                            type={0}
+                            bg=""
+                            layout={mini}
+                        >
+                            <MaterialSymbol name="menu" />
+                        </Button>
+                        <Divider vr={1} color="border-slate-600" spacing="" />
+                        <Button
+                            onClick={() => (compact = 0)}
+                            type={0}
+                            bg=""
+                            layout={mini}
+                        >
+                            <MaterialSymbol name="grid_view" />
+                        </Button>
+                    {/if}
+                </Row>
             </Row>
         </Row>
         <Column name="scroller" layout="overflow-auto rounded bg-slate-700">
             {@const isCompact = compact
                 ? 'flex-col gap-2 p-2'
-                : `grid ${
-                    dashboard
-                        ? 'grid-cols-2'
-                        : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
-                } gap-4 p-4`}
+                : 'grid gap-4 p-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'}
             <Column name="wallet-list" layout={isCompact} shrink={0} grow={0}>
                 {#if compact}
                     <Row
                         name="wallet-header"
                         grow={0}
                         shrink={0}
-                        layout="py-2 px-4 rounded bg-slate-600"
+                        layout="py-2 pl-4 pr-2 rounded bg-slate-600"
                     >
                         <Row name="address" grow={0} layout="w-2/5">
-                            <span class="flex-1 overflow-hidden text-ellipsis">Address</span>
+                            <span class="flex-1 overflow-hidden text-ellipsis">{$t('wallet.address')}</span>
                         </Row>
                         <Divider vr={1} spacing="mx-3" />
                         <Row
@@ -134,7 +155,7 @@
                     </Row>
                 {/if}
                 {#each $currentUser.wallets as address (address)}
-                    <Wallet privateKey={decrypt(address, $currentUser.password)} {dashboard} {compact} />
+                    <Wallet privateKey={decrypt(address, $currentUser.password)} {compact} />
                 {/each}
             </Column>
         </Column>

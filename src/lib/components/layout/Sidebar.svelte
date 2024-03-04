@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from '$lib/i18n';
-    import { currentUser } from '$lib/util/users';
+    import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '.';
     import { Link, Button, MaterialSymbol } from '../.';
 
@@ -55,12 +55,10 @@
                             onClick={(e) => {
                                 e.preventDefault();
 
-                                if ($currentUser) {
-                                    $currentUser.pinned[href] = !$currentUser?.pinned[href];
-                                }
+                                $currentUser.pinned[href] = !$currentUser.pinned[href];
                             }}
                         >
-                            <MaterialSymbol name="push_pin" fill={$currentUser?.pinned[href]} />
+                            <MaterialSymbol name="push_pin" fill={$currentUser.pinned[href]} />
                         </Button>
                     {/if}
                 </Row>
