@@ -1,12 +1,12 @@
 <script lang="ts">
     import { getToastStore } from '@skeletonlabs/skeleton';
     import { t } from '$lib/i18n';
-    import { copy } from '$lib/util';
+    import { copy, replacer } from '$lib/util';
     import { toastMessage } from '$lib/util/toast';
     import { hash } from '$lib/util/client/users';
     import { currentUser } from '$lib/util/client/user';
-    import { decrypt } from '$lib/util/wallets';
-    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
+    import { NETWORKS, decrypt, getNetworkFile, getNetworkFiles, getNetworkName, getNetworkNames } from '$lib/util/wallets';
+    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Toggle } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
     import { Wallet } from '$lib/components/client';
 
@@ -19,6 +19,7 @@
     let exportKeys = '';
     let exportShown = false;
     let exportKeysShown = false;
+    let networksShown = false;
 
     function onExport() {
         if (!$currentUser) return;
@@ -42,16 +43,17 @@
         exportShown = false;
     }
 
-    let networksVisible = false;
-    function openDropdown() {
-        networksVisible = !networksVisible;
+    function toggleNetwork(network: number) {
+        if (!$currentUser) return;
+
+        $currentUser.networks ^= network;
     }
 
     function onClick(e: MouseEvent) {
         const target = e.target as Element;
 
         if (!target.closest('.networks')) {
-            networksVisible = false;
+            networksShown = false;
         }
     }
 </script>
@@ -61,7 +63,7 @@
 {#if $currentUser?.wallets.length}
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
-        {@const border = dashboard ? '' : 'rounded border-2 border-slate-600'}
+        {@const border = dashboard ? '' : 'rounded border-2 border-solid border-slate-600'}
         <Row name="controls" justify={3} grow={0} layout="mb-2">
             <Input
                 size={1}
@@ -83,16 +85,45 @@
                 </Row>
             </Input>
             <Row grow={0} name="controls-right" layout="h-full">
-                <Row name="networks" align={undefined} layout="!block h-full w-48 relative mr-2">
-                    <Button type={0} layout="h-full w-full rounded border-solid {border}" onClick={openDropdown}>
-                        lotta nets
+                <Row name="networks" layout="!block h-full w-64 relative mr-2">
+                    <Button type={2} layout="!justify-start h-full w-full {dashboard ? 'py-0 px-2 bg-slate-700' : ''} rounded truncate {border}" onClick={() => networksShown = !networksShown}>
+                        {#if $currentUser.networks}
+                            {@const networks = getNetworkNames($currentUser.networks)}
+                            {@const networkFiles = getNetworkFiles($currentUser.networks)}
+
+                            <Row name="networks-logo" grow={0} shrink={0} layout="-space-x-2">
+                                {#each networkFiles.slice(0, 2) as networkFile (networkFile)}
+                                    <img src={networkFile} alt={networkFile.slice(4)} class="{dashboard ? 'w-4 h-4' : 'w-6 h-6'} rounded-full flex-shrink-0" />
+                                {/each}
+                                {#if networks.length > 2}
+                                    <Row name="networks-more" justify={1} layout="{dashboard ? 'w-4 h-4' : 'w-6 h-6'} rounded-full text-xs bg-slate-700">
+                                        {networks.length - 2}+
+                                    </Row>
+                                {/if}
+                            </Row>
+                            <span class="truncate">
+                                {#if networks.length === 1}
+                                    {$t(networks[0])}
+                                {:else}
+                                    {replacer($t('networks.networks-active'), '{x}', networks.length)}
+                                {/if}
+                            </span>
+                        {:else}
+                            <span class="truncate">
+                                {$t('networks.networks-none')}
+                            </span>
+                        {/if}
                     </Button>
-                    <Column name="networks-list" layout="fixed {networksVisible ? '' : 'hidden'} bg-slate-900 w-48 z-10 overflow-hidden mt-2">
-                        <!-- {#if $clients.length}
-                            {#each $clients as client (client.uid)}
-                                <button type="button" class="option flex items-center px-4 hover:bg-white/10">{client.chain?.name || 'unknown'}</button>
-                            {/each}
-                        {/if} -->
+                    <Column name="networks-list" layout="fixed {networksShown ? '' : 'hidden'} rounded bg-slate-900 w-64 z-10 overflow-hidden mt-2">
+                        {#each Object.keys(NETWORKS) as key (key)}
+                            {@const network = NETWORKS[key]}
+                            <Toggle onChange={() => toggleNetwork(network)} checked={!!($currentUser.networks & network)} labelClass="network flex w-full items-center px-4 py-3 hover:bg-white/10">
+                                <img src={getNetworkFile(network)} alt={getNetworkName(network)} class="w-6 rounded" />
+                                <span class="truncate mx-2 flex-grow">
+                                    {$t(getNetworkName(network))}
+                                </span>
+                            </Toggle>
+                        {/each}
                     </Column>
                 </Row>
                 <Row name="view" grow={0} layout="h-full rounded {border}">

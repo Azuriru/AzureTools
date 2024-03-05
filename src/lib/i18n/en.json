@@ -48,5 +48,13 @@
     "wallet.address": "Address",
     "generic.create": "Create",
     "generic.login": "Login",
-    "generic.done": "Done"
+    "generic.done": "Done",
+    "networks.ethereum": "Ethereum",
+    "networks.bsc": "BNB Smart Chain",
+    "networks.sepolia": "Sepolia",
+    "networks.goerli": "Goerli",
+    "networks.holesky": "Holesky",
+    "networks.bsctest": "BNB Smart Chain Testnet",
+    "networks.networks-active": "{x} networks",
+    "networks.networks-none": "No networks active"
 }

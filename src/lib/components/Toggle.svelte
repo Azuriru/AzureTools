@@ -1,27 +1,46 @@
 
-<script>
-    import { SlideToggle } from '@skeletonlabs/skeleton';
+<script lang="ts">
+    import type { ChangeEventHandler } from 'svelte/elements';
 
-    export let checked;
-    export let label = '';
-    export let desc = '';
-    export let spacing = '';
-
-    let uniqueID = `label-${Math.floor(Math.random() * 2000)}`;
+    export let checked: boolean;
+    export let labelClass = '';
+    export let onChange: ChangeEventHandler<HTMLInputElement> = () => {};
 </script>
 
-<div class="flex text-sm {spacing}">
-    <label class="flex flex-col flex-grow" for={uniqueID}>
-        <div class="flex justify-between items-start mb-1">
-            <div class="text-sm font-semibold caps-first">{label}</div>
-            <SlideToggle
-                bind:checked
-                name={uniqueID}
-                size="sm"
-                background="bg-surface-500"
-                active="bg-primary-500"
-            />
-        </div>
-        <div class="text-xs text-gray-400 caps-first">{desc}</div>
-    </label>
-</div>
+<label class="toggle-label {labelClass}">
+    <slot />
+    <input
+        type="checkbox"
+        bind:checked
+        on:change={onChange}
+    />
+    <div class="toggle-ui flex flex-shrink-0 items-center w-11 h-6 rounded-full relative cursor-pointer bg-slate-500" />
+</label>
+
+<style lang="scss">
+    .toggle-label {
+        input {
+            display: none;
+
+            & + .toggle-ui {
+                &::before {
+                    position: absolute;
+                    content: "";
+                    height: 18px;
+                    width: 18px;
+                    left: 3px;
+                    background-color: white;
+                    border-radius: 9px;
+                }
+            }
+
+            &:checked + .toggle-ui {
+                @apply bg-cyan-500;
+
+                &::before {
+                    transform: translateX(20px);
+                }
+            }
+        }
+    }
+</style>

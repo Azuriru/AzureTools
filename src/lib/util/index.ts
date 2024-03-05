@@ -14,6 +14,8 @@ export const normalize = (str: string) => str.normalize('NFD').replace(/[\u0300-
 
 export const stringify = (str: string) => normalize(str).toLowerCase().replace(/ /g, '-');
 
+export const replacer = (str: string, find: string | RegExp, replaceWith: string | number) => str.replace(find, `${replaceWith}`);
+
 export const color = (str: string) => str.slice(4, -1).split(', ').map(Number);
 
 export const hsl = (str: string) => str.slice(4, -1).split(', ').map(s => parseInt(s));
