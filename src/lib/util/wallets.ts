@@ -1,4 +1,3 @@
-import assert from 'assertmin';
 import CryptoES from 'crypto-es';
 import { type Hex, type Chain } from 'viem';
 import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet } from 'viem/chains';
@@ -12,6 +11,8 @@ export const NETWORKS = {
     BSC_TESTNET: 32
 } as const;
 
+export const NETWORKS_ALL = 63;
+
 export const NETWORK_KEYS = {
     ETHEREUM: 'networks.ethereum',
     BSC: 'networks.bsc',
@@ -20,6 +21,25 @@ export const NETWORK_KEYS = {
     HOLESKY: 'networks.holesky',
     BSC_TESTNET: 'networks.bsctest'
 } as const;
+
+export function getNetwork(network: number): Chain {
+    switch(network) {
+        case NETWORKS.ETHEREUM:
+            return mainnet;
+        case NETWORKS.SEPOLIA:
+            return sepolia;
+        case NETWORKS.GOERLI:
+            return goerli;
+        case NETWORKS.HOLESKY:
+            return holesky;
+        case NETWORKS.BSC:
+            return bsc;
+        case NETWORKS.BSC_TESTNET:
+            return bscTestnet;
+        default:
+            return mainnet;
+    }
+}
 
 export function getNetworks(networks: number) {
     const nets: Chain[] = [];
@@ -32,6 +52,25 @@ export function getNetworks(networks: number) {
     if (networks & NETWORKS.BSC_TESTNET) nets.push(bscTestnet);
 
     return nets;
+}
+
+export function getNetworkName(network: number) {
+    switch(network) {
+        case NETWORKS.ETHEREUM:
+            return NETWORK_KEYS.ETHEREUM;
+        case NETWORKS.SEPOLIA:
+            return NETWORK_KEYS.SEPOLIA;
+        case NETWORKS.GOERLI:
+            return NETWORK_KEYS.GOERLI;
+        case NETWORKS.HOLESKY:
+            return NETWORK_KEYS.HOLESKY;
+        case NETWORKS.BSC:
+            return NETWORK_KEYS.BSC;
+        case NETWORKS.BSC_TESTNET:
+            return NETWORK_KEYS.BSC_TESTNET;
+        default:
+            return 'networks.unknown';
+    }
 }
 
 export function getNetworkNames(networks: number) {
@@ -47,23 +86,41 @@ export function getNetworkNames(networks: number) {
     return names;
 }
 
-export function getNetworkName(network: number) {
+export function getNetworkFile(network: number, small: boolean = false) {
+    const size = small ? 64 : 256;
+    const file = (name: string) => `/networks/${name}_${size}.png`;
+
     switch(network) {
         case NETWORKS.ETHEREUM:
-            return NETWORK_KEYS.ETHEREUM;
-        case NETWORKS.BSC:
-            return NETWORK_KEYS.BSC;
+            return file('eth');
         case NETWORKS.SEPOLIA:
-            return NETWORK_KEYS.SEPOLIA;
+            return file('eth_test_s');
         case NETWORKS.GOERLI:
-            return NETWORK_KEYS.GOERLI;
+            return file('eth_test_g');
         case NETWORKS.HOLESKY:
-            return NETWORK_KEYS.HOLESKY;
+            return file('eth_test_h');
+        case NETWORKS.BSC:
+            return file('bnb');
         case NETWORKS.BSC_TESTNET:
-            return NETWORK_KEYS.BSC_TESTNET;
+            return file('bnb_test');
         default:
-            assert.eq(getNetworkName(NETWORKS.SEPOLIA | NETWORKS.GOERLI), 'networks.unknown');
+            return 'networks.unknown';
     }
+}
+
+export function getNetworkFiles(networks: number, small: boolean = false) {
+    const size = small ? 64 : 256;
+    const file = (name: string) => `/networks/${name}_${size}.png`;
+    const files: string[] = [];
+
+    if (networks & NETWORKS.ETHEREUM) files.push(file('eth'));
+    if (networks & NETWORKS.SEPOLIA) files.push(file('eth_test_s'));
+    if (networks & NETWORKS.GOERLI) files.push(file('eth_test_g'));
+    if (networks & NETWORKS.HOLESKY) files.push(file('eth_test_h'));
+    if (networks & NETWORKS.BSC) files.push(file('bnb'));
+    if (networks & NETWORKS.BSC_TESTNET) files.push(file('bnb_test'));
+
+    return files;
 }
 
 export function encrypt(privateKey: string, password: string): string {
