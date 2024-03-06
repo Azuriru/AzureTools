@@ -1,10 +1,11 @@
 import CryptoES from 'crypto-es';
-import { persistible } from '../store';
-import { get, type Unsubscriber } from 'svelte/store';
-import { currentUser, type User } from './user';
-import { clients, networks } from './wallets';
-import { getNetworks } from '../wallets';
 import { createPublicClient, http } from 'viem';
+import { get, type Unsubscriber } from 'svelte/store';
+import { persistible } from '../store';
+import { decrypt, getNetworks } from '../wallets';
+import { currentUser, type User } from './user';
+import { wallets, networks, clients } from './wallets';
+import { Wallet } from './wallet';
 
 export const users = persistible<User[]>('users', []);
 export const currentSession = persistible<string | null>('session', null);
@@ -22,6 +23,12 @@ const _unsubscribeSession = currentSession.subscribe(session => {
             users.update(users => users);
 
             if (!user) return;
+
+            wallets.update(() => {
+                return user.wallets.map(hash => {
+                    return new Wallet(decrypt(hash, user.password));
+                });
+            });
 
             networks.update(() => {
                 const networks = getNetworks(user.networks);

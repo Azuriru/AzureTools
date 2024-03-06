@@ -4,7 +4,6 @@
 
 <script lang="ts">
     import Icon from './MaterialSymbol.svelte';
-    import { type MaterialSymbol } from 'material-symbols';
 
     export let selectedOption = 0;
     export let options = ['a', 'b', 'c'];

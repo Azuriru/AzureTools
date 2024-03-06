@@ -1,17 +1,18 @@
 import CryptoES from 'crypto-es';
 import { type Hex, type Chain } from 'viem';
-import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet } from 'viem/chains';
+import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet, polygon } from 'viem/chains';
 
 export const NETWORKS = {
     ETHEREUM: 1,
     BSC: 2,
-    SEPOLIA: 4,
-    GOERLI: 8,
-    HOLESKY: 16,
-    BSC_TESTNET: 32
+    POLYGON: 4,
+    SEPOLIA: 8,
+    GOERLI: 16,
+    HOLESKY: 32,
+    BSC_TESTNET: 64
 } as const;
 
-export const NETWORKS_ALL = 63;
+export const NETWORKS_ALL = Object.values(NETWORKS).reduce((c, v) => c + v, 0);
 
 export const NETWORK_KEYS = {
     ETHEREUM: 'networks.ethereum',
@@ -19,7 +20,8 @@ export const NETWORK_KEYS = {
     SEPOLIA: 'networks.sepolia',
     GOERLI: 'networks.goerli',
     HOLESKY: 'networks.holesky',
-    BSC_TESTNET: 'networks.bsctest'
+    BSC_TESTNET: 'networks.bsctest',
+    POLYGON: 'networks.polygon'
 } as const;
 
 export function getNetwork(network: number): Chain {
@@ -36,6 +38,8 @@ export function getNetwork(network: number): Chain {
             return bsc;
         case NETWORKS.BSC_TESTNET:
             return bscTestnet;
+        case NETWORKS.POLYGON:
+            return polygon;
         default:
             return mainnet;
     }
@@ -50,6 +54,7 @@ export function getNetworks(networks: number) {
     if (networks & NETWORKS.HOLESKY) nets.push(holesky);
     if (networks & NETWORKS.BSC) nets.push(bsc);
     if (networks & NETWORKS.BSC_TESTNET) nets.push(bscTestnet);
+    if (networks & NETWORKS.POLYGON) nets.push(polygon);
 
     return nets;
 }
@@ -68,6 +73,8 @@ export function getNetworkName(network: number) {
             return NETWORK_KEYS.BSC;
         case NETWORKS.BSC_TESTNET:
             return NETWORK_KEYS.BSC_TESTNET;
+        case NETWORKS.POLYGON:
+            return NETWORK_KEYS.POLYGON;
         default:
             return 'networks.unknown';
     }
@@ -82,6 +89,7 @@ export function getNetworkNames(networks: number) {
     if (networks & NETWORKS.HOLESKY) names.push(NETWORK_KEYS.HOLESKY);
     if (networks & NETWORKS.BSC) names.push(NETWORK_KEYS.BSC);
     if (networks & NETWORKS.BSC_TESTNET) names.push(NETWORK_KEYS.BSC_TESTNET);
+    if (networks & NETWORKS.POLYGON) names.push(NETWORK_KEYS.POLYGON);
 
     return names;
 }
@@ -103,8 +111,10 @@ export function getNetworkFile(network: number, small: boolean = false) {
             return file('bnb');
         case NETWORKS.BSC_TESTNET:
             return file('bnb_test');
+        case NETWORKS.POLYGON:
+            return file('polygon');
         default:
-            return 'networks.unknown';
+            return file('unknown');
     }
 }
 
@@ -119,8 +129,28 @@ export function getNetworkFiles(networks: number, small: boolean = false) {
     if (networks & NETWORKS.HOLESKY) files.push(file('eth_test_h'));
     if (networks & NETWORKS.BSC) files.push(file('bnb'));
     if (networks & NETWORKS.BSC_TESTNET) files.push(file('bnb_test'));
+    if (networks & NETWORKS.POLYGON) files.push(file('polygon'));
 
     return files;
+}
+
+export function getNetworkCurrency(network: string | undefined): string | undefined {
+    switch(network) {
+        case 'Ethereum':
+            return 'ETH';
+        case 'Sepolia':
+            return 'sETH';
+        case 'Goerli':
+            return 'gETH';
+        case 'Holesky':
+            return 'hETH';
+        case 'BNB Smart Chain':
+            return 'BNB';
+        case 'Binance Smart Chain Testnet':
+            return 'tBNB';
+        case 'Polygon':
+            return 'MATIC';
+    }
 }
 
 export function encrypt(privateKey: string, password: string): string {

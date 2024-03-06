@@ -1,19 +1,20 @@
 <script lang="ts">
-    import { type Hex } from 'viem';
+    import { formatEther } from 'viem';
     import { t } from '$lib/i18n';
     import { removeWallet } from '$lib/util/client/user';
-    import { Wallet } from '$lib/util/client/wallet';
+    import { type WalletInterface } from '$lib/util/client/wallet';
     import { Row, Column } from '$lib/components/layout';
     import { Button, Divider, Link, MaterialSymbol } from '$lib/components';
     import { Tab, TabGroup } from '@skeletonlabs/skeleton';
+    import { clients } from '$lib/util/client/wallets';
     import { copy } from '$lib/util';
 
-    export let selectedTab = 0;
-    export let privateKey: Hex;
+    export let client: WalletInterface;
     export let compact: 0 | 1 = 0;
 
-    const wallet = new Wallet(privateKey);
-    const { address } = wallet;
+    let selectedTab = 0;
+
+    const { address, privateKey } = client;
     const tablist = [
         'wallet.tokens',
         'wallet.nfts',
@@ -33,17 +34,18 @@
             </Button>
         </Row>
         <Divider vr={1} spacing="mx-3" />
-        <Row name="balance" layout="h-full whitespace-nowrap overflow-hidden">
-            {#await wallet.getBalance()}
+        <Row name="balance" justify={1} layout="h-full whitespace-nowrap overflow-hidden">
+            {#await client.getBalances($clients)}
                 {$t('wallet.balance-loading')}
-            {:then { chain, usdt }}
-                <span class="flex-1 text-center">
-                    {chain}
-                </span>
-                <Divider vr={1} spacing="mx-3" />
-                <span class="flex-1 text-center text-ellipsis overflow-hidden">
-                    ${usdt}
-                </span>
+            {:then balances}
+                {#each balances as currency, index (currency)}
+                    {#if index !== 0}
+                        <Divider vr={1} spacing="mx-3" />
+                    {/if}
+                    <span class="flex-1 text-center truncate">
+                        {formatEther(currency.balance)}
+                    </span>
+                {/each}
             {/await}
         </Row>
         <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.preventDefault(), removeWallet(privateKey))}>
@@ -59,16 +61,15 @@
             <MaterialSymbol name="close" />
         </Button>
         <Column name="balance" align={1} layout="!mt-0 h-16">
-            {#await wallet.getBalance()}
+            {#await client.getBalances($clients)}
                 <Row>
                     {$t('wallet.balance-loading')}
                 </Row>
-            {:then { chain, usdt }}
-                <Row name="balance-chain" layout="text-3xl font-semibold mb-1">
-                    {wallet.formatBalance(chain, 0)} BNB
-                </Row>
-                <Row name="balance-usdt" layout="">
-                    ${wallet.formatBalance(usdt)} USDT
+            {:then balances}
+                <!-- todo: convert all balances to usdt -->
+                {@const { balance, symbol } = balances[0]}
+                <Row name="balance-chain" layout="text-3xl font-semibold mb-1 text-center">
+                    {formatEther(balance)} {symbol}
                 </Row>
             {/await}
         </Column>
