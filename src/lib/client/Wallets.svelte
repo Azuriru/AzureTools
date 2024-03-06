@@ -5,10 +5,11 @@
     import { toastMessage } from '$lib/util/toast';
     import { hash } from '$lib/util/client/users';
     import { currentUser } from '$lib/util/client/user';
-    import { NETWORKS, decrypt, getNetworkFile, getNetworkFiles, getNetworkName, getNetworkNames } from '$lib/util/wallets';
+    import { clients, wallets } from '$lib/util/client/wallets';
+    import { NETWORKS, decrypt, getNetworkCurrency, getNetworkFile, getNetworkFiles, getNetworkName, getNetworkNames } from '$lib/util/wallets';
     import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Toggle } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
-    import { Wallet } from '$lib/components/client';
+    import Wallet from './Wallet.svelte';
 
     export let compact: 0 | 1 = 0;
     export let dashboard: 0 | 1 = 0;
@@ -64,6 +65,7 @@
     <Column name="wallets" layout="h-full">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
         {@const border = dashboard ? '' : 'rounded border-2 border-solid border-slate-600'}
+
         <Row name="controls" justify={3} grow={0} layout="mb-2">
             <Input
                 size={1}
@@ -87,6 +89,7 @@
             <Row grow={0} name="controls-right" layout="h-full">
                 <Row name="networks" layout="!block h-full w-64 relative mr-2">
                     <Button type={2} layout="!justify-start h-full w-full {dashboard ? 'py-0 px-2 bg-slate-700' : ''} rounded truncate {border}" onClick={() => networksShown = !networksShown}>
+
                         {#if $currentUser.networks}
                             {@const networks = getNetworkNames($currentUser.networks)}
                             {@const networkFiles = getNetworkFiles($currentUser.networks)}
@@ -113,6 +116,7 @@
                                 {$t('networks.networks-none')}
                             </span>
                         {/if}
+
                     </Button>
                     <Column name="networks-list" layout="fixed {networksShown ? '' : 'hidden'} rounded bg-slate-900 w-64 z-10 overflow-hidden mt-2">
                         {#each Object.keys(NETWORKS) as key (key)}
@@ -174,19 +178,21 @@
                             <span class="flex-1 overflow-hidden text-ellipsis">{$t('wallet.address')}</span>
                         </Row>
                         <Divider vr={1} spacing="mx-3" />
-                        <Row
-                            name="balance"
-                            layout="h-full whitespace-nowrap overflow-hidden"
-                        >
-                            <span class="flex-1 text-center">BNB</span>
-                            <Divider vr={1} spacing="mx-3" />
-                            <span class="flex-1 text-center text-ellipsis overflow-hidden">USDT</span>
+                        <Row name="balance" layout="h-full whitespace-nowrap overflow-hidden">
+                            {#each $clients.map(client => client.chain) as chain, index (chain)}
+                                {#if index !== 0}
+                                    <Divider vr={1} spacing="mx-3" />
+                                {/if}
+                                <span class="flex-1 text-center truncate">
+                                    {getNetworkCurrency(chain?.name) || $t('wallet.currency-unknown')}
+                                </span>
+                            {/each}
                         </Row>
                         <Row name="empty" grow={0} layout="w-6 flex-shrink-0" />
                     </Row>
                 {/if}
-                {#each $currentUser.wallets as address (address)}
-                    <Wallet privateKey={decrypt(address, $currentUser.password)} {compact} />
+                {#each $wallets as wallet (wallet)}
+                    <Wallet client={wallet} {compact} />
                 {/each}
             </Column>
         </Column>
