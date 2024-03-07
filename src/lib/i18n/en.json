@@ -51,6 +51,7 @@
     "wallet.activity": "Activity",
     "wallet.address": "Address",
     "wallet.currency-unknown": "Unknown Currency",
+    "tokens": "",
     "generic.create": "Create",
     "generic.login": "Login",
     "generic.done": "Done",
