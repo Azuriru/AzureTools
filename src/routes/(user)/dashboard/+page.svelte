@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { ImportWallets, Wallets, Market, Multisend, Analytics } from '$lib/client';
+    import { ImportWallets, Wallets, Tokens, Market, Multisend, Analytics } from '$lib/client';
     import { Row } from '$lib/components/layout';
     import { currentUser } from '$lib/util/client/user';
 </script>
@@ -9,6 +9,9 @@
     {#if $currentUser}
         {#if $currentUser.pinned.wallets}
             <Wallets compact={1} dashboard={1} />
+        {/if}
+        {#if $currentUser.pinned.tokens}
+            <Tokens />
         {/if}
         {#if $currentUser.pinned.send}
             <Multisend />

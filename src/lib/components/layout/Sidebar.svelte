@@ -7,6 +7,7 @@
     const sidebarItemsStart = [
         ['dashboard', 'sidebar.dashboard'],
         ['wallet', 'sidebar.wallets'],
+        ['token', 'sidebar.tokens'],
         ['send', 'sidebar.send'],
         ['shopping_cart', 'sidebar.market'],
         ['insert_chart', 'sidebar.analytics']
