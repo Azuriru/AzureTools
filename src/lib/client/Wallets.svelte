@@ -179,7 +179,7 @@
                         </Row>
                         <Divider vr={1} spacing="mx-3" />
                         <Row name="balance" layout="h-full whitespace-nowrap overflow-hidden">
-                            {#each $clients.map(client => client.chain) as chain, index (chain)}
+                            {#each Object.values($clients).map(client => client.chain) as chain, index (chain)}
                                 {#if index !== 0}
                                     <Divider vr={1} spacing="mx-3" />
                                 {/if}

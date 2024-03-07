@@ -19,5 +19,5 @@ export const toastMessage = (message: string): ToastSettings => {
     return {
         message: t.get(message),
         background
-    }
-}
+    };
+};
