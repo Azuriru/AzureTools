@@ -84,6 +84,14 @@
                 "numbers": true
             }
         ],
+        "@stylistic/js/semi": [
+            "warn",
+            "always",
+            {
+                "omitLastInOneLineBlock": true,
+                "omitLastInOneLineClassBody": false
+            }
+        ],
         // Possible errors
         "svelte/infinite-reactive-loop": "warn",
         "svelte/no-dom-manipulating": "warn",

@@ -2,6 +2,7 @@ import CryptoES from 'crypto-es';
 import { type Hex, type Chain } from 'viem';
 import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet, polygon } from 'viem/chains';
 
+export type Network = typeof NETWORKS[keyof typeof NETWORKS];
 export const NETWORKS = {
     ETHEREUM: 1,
     BSC: 2,
@@ -11,20 +12,31 @@ export const NETWORKS = {
     HOLESKY: 32,
     BSC_TESTNET: 64
 } as const;
-
 export const NETWORKS_ALL = Object.values(NETWORKS).reduce((c, v) => c + v, 0);
 
+export type NetworkNames = typeof NETWORK_NAMES[keyof typeof NETWORK_NAMES];
+export const NETWORK_NAMES = {
+    ETHEREUM: 'Ethereum',
+    BSC: 'BNB Smart Chain',
+    POLYGON: 'Polygon',
+    SEPOLIA: 'Sepolia',
+    GOERLI: 'Goerli',
+    HOLESKY: 'Holesky',
+    BSC_TESTNET: 'Binance Smart Chain Testnet'
+} as const;
+
+export type NetworKeys = typeof NETWORK_KEYS[keyof typeof NETWORK_KEYS];
 export const NETWORK_KEYS = {
     ETHEREUM: 'networks.ethereum',
     BSC: 'networks.bsc',
+    POLYGON: 'networks.polygon',
     SEPOLIA: 'networks.sepolia',
     GOERLI: 'networks.goerli',
     HOLESKY: 'networks.holesky',
-    BSC_TESTNET: 'networks.bsctest',
-    POLYGON: 'networks.polygon'
+    BSC_TESTNET: 'networks.bsctest'
 } as const;
 
-export function getNetwork(network: number): Chain {
+export function getNetwork(network: Network): Chain {
     switch(network) {
         case NETWORKS.ETHEREUM:
             return mainnet;
@@ -59,7 +71,7 @@ export function getNetworks(networks: number) {
     return nets;
 }
 
-export function getNetworkName(network: number) {
+export function getNetworkName(network: Network) {
     switch(network) {
         case NETWORKS.ETHEREUM:
             return NETWORK_KEYS.ETHEREUM;
@@ -94,7 +106,7 @@ export function getNetworkNames(networks: number) {
     return names;
 }
 
-export function getNetworkFile(network: number, small: boolean = false) {
+export function getNetworkFile(network: Network, small: boolean = false) {
     const size = small ? 64 : 256;
     const file = (name: string) => `/networks/${name}_${size}.png`;
 
@@ -134,22 +146,41 @@ export function getNetworkFiles(networks: number, small: boolean = false) {
     return files;
 }
 
-export function getNetworkCurrency(network: string | undefined): string | undefined {
+export function getNetworkCurrency(network?: string): string | void {
     switch(network) {
-        case 'Ethereum':
+        case NETWORK_NAMES.ETHEREUM:
             return 'ETH';
-        case 'Sepolia':
+        case NETWORK_NAMES.SEPOLIA:
             return 'sETH';
-        case 'Goerli':
+        case NETWORK_NAMES.GOERLI:
             return 'gETH';
-        case 'Holesky':
+        case NETWORK_NAMES.HOLESKY:
             return 'hETH';
-        case 'BNB Smart Chain':
+        case NETWORK_NAMES.BSC:
             return 'BNB';
-        case 'Binance Smart Chain Testnet':
+        case NETWORK_NAMES.BSC_TESTNET:
             return 'tBNB';
-        case 'Polygon':
+        case NETWORK_NAMES.POLYGON:
             return 'MATIC';
+    }
+}
+
+export function getNetworkId(network?: string): number | void {
+    switch(network) {
+        case NETWORK_NAMES.ETHEREUM:
+            return NETWORKS.ETHEREUM;
+        case NETWORK_NAMES.SEPOLIA:
+            return NETWORKS.SEPOLIA;
+        case NETWORK_NAMES.GOERLI:
+            return NETWORKS.GOERLI;
+        case NETWORK_NAMES.HOLESKY:
+            return NETWORKS.HOLESKY;
+        case NETWORK_NAMES.BSC:
+            return NETWORKS.BSC;
+        case NETWORK_NAMES.BSC_TESTNET:
+            return NETWORKS.BSC_TESTNET;
+        case NETWORK_NAMES.POLYGON:
+            return NETWORKS.POLYGON;
     }
 }
 

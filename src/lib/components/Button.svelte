@@ -5,7 +5,7 @@
 
     export let type: 0 | 1 | 2 = 1;
     export let thin = 0;
-    export let width = 'flex-grow'
+    export let width = 'flex-grow';
     export let bg = type ? 'bg-cyan-500' : '';
     export let size = thin ? 'text-sm' : 'text-sm';
     export let layout = '';

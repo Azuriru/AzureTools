@@ -12,7 +12,7 @@ export interface WalletInterface {
     account: PrivateKeyAccount;
 
     get address(): Hex;
-    getBalance(client: PublicClient, address: Address, abi: Abi);
+    getBalance(client: PublicClient, address: Address, abi?: Abi);
     getBalances(clients: Clients): Promise<BalancesType>;
 }
 
@@ -39,14 +39,14 @@ export class Wallet implements WalletInterface {
     }
 
     async getBalances(clients: Clients): Promise<BalancesType> {
-        return await Promise.all(clients.map(async (client) => {
+        return await Promise.all(Object.values(clients).map(async (client) => {
             const balance = await client.getBalance({ address: this.address });
             const symbol = client.chain?.nativeCurrency.symbol;
 
             return {
                 balance,
                 symbol
-            }
+            };
         }));
     }
 }

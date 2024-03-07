@@ -7,7 +7,9 @@
     import { Button, Divider, Link, MaterialSymbol } from '$lib/components';
     import { Tab, TabGroup } from '@skeletonlabs/skeleton';
     import { clients } from '$lib/util/client/wallets';
+    import { getNetworkTokens } from '$lib/util/tokens';
     import { copy } from '$lib/util';
+    import { NETWORKS } from '$lib/util/wallets';
 
     export let client: WalletInterface;
     export let compact: 0 | 1 = 0;
@@ -20,6 +22,17 @@
         'wallet.nfts',
         'wallet.activity'
     ] as const;
+
+    const tokens = getNetworkTokens(NETWORKS.ETHEREUM);
+    const publicClient = $clients[NETWORKS.ETHEREUM];
+
+    if (publicClient) {
+        Promise.all(
+            tokens.map(async ({ address }) => await client.getBalance(publicClient, address))
+        ).then(console.log);
+
+    }
+
 </script>
 
 {#if compact}
