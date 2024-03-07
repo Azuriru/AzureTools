@@ -89,6 +89,7 @@
             border="border-0"
             padding=""
             class="w-full px-8 text-sm border-b-2 border-transparent"
+            on:click={(e) => e.stopPropagation()}
         >
             {#each tablist as tab, i (tab)}
                 <Tab bind:group={selectedTab} name={tab} value={i}>
@@ -96,34 +97,40 @@
                 </Tab>
             {/each}
         </TabGroup>
-        <Column name="token-list" layout="w-full h-40 overflow-auto space-y-2 px-8 pb-4">
-            {#await tokens}
-                <Row name="tokens-loading" justify={1} layout="h-full">
-                    {$t('wallet.loading-tokens')}
+        <Column name="tab-content" layout="w-full h-40 overflow-auto space-y-2 px-8 pb-4">
+            {#if selectedTab}
+                <Row name="nft-loading" justify={1} layout="w-full h-40 px-8 pb-">
+                    {$t('wallet.loading-nft')}
                 </Row>
-            {:then tokens}
-                {#each tokens as token (token)}
-                    {#if token}
-                        {@const { symbol, balance, network } = token}
-                        <Row name="token" grow={0} justify={3}>
-                            <Row name="token-data" grow={0} shrink={0} layout="mr-3">
-                                <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />
-                                <Column>
-                                    <span class="font-semibold">
-                                        {symbol}
-                                    </span>
-                                    <span class="text-xs">
-                                        {$t(getNetworkName(network))}
-                                    </span>
-                                </Column>
+            {:else}
+                {#await tokens}
+                    <Row name="tokens-loading" justify={1} layout="h-full">
+                        {$t('wallet.loading-tokens')}
+                    </Row>
+                {:then tokens}
+                    {#each tokens as token (token)}
+                        {#if token}
+                            {@const { symbol, balance, network } = token}
+                            <Row name="token" grow={0} justify={3}>
+                                <Row name="token-data" grow={0} shrink={0} layout="mr-3">
+                                    <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />
+                                    <Column>
+                                        <span class="font-semibold">
+                                            {symbol}
+                                        </span>
+                                        <span class="text-xs">
+                                            {$t(getNetworkName(network))}
+                                        </span>
+                                    </Column>
+                                </Row>
+                                <span class="truncate">
+                                    {formatEther(balance)}
+                                </span>
                             </Row>
-                            <span class="truncate">
-                                {formatEther(balance)}
-                            </span>
-                        </Row>
-                    {/if}
-                {/each}
-            {/await}
+                        {/if}
+                    {/each}
+                {/await}
+            {/if}
         </Column>
     </Link>
 {/if}
