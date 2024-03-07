@@ -26,6 +26,10 @@ export const TOKENS_ETHEREUM = [
 
 export const TOKENS_BSC = [
     {
+        address: '0x524bC91Dc82d6b90EF29F76A3ECAaBAffFD490Bc',
+        symbol: 'USDT'
+    },
+    {
         address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
         symbol: 'BTCB'
     },

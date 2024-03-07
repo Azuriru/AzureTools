@@ -144,7 +144,6 @@
                         <Button
                             onClick={() => (compact = 1)}
                             type={0}
-                            bg=""
                             layout={mini}
                         >
                             <MaterialSymbol name="menu" />
@@ -153,10 +152,17 @@
                         <Button
                             onClick={() => (compact = 0)}
                             type={0}
-                            bg=""
                             layout={mini}
                         >
                             <MaterialSymbol name="grid_view" />
+                        </Button>
+                        <Divider vr={1} color="border-slate-600" spacing="" />
+                        <Button
+                            onClick={() => {}}
+                            type={0}
+                            layout={mini}
+                        >
+                            <MaterialSymbol name="settings" />
                         </Button>
                     {/if}
                 </Row>
