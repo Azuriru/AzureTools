@@ -1,3 +1,5 @@
+import type { JSONValue } from './types';
+
 export const path = (...paths: string[]) => `/${paths.join('/')}`;
 
 export const padStart = (str: any, num: number, fill = ' ') => str.toString().padStart(num, fill);
@@ -22,7 +24,6 @@ export const hsl = (str: string) => str.slice(4, -1).split(', ').map(s => parseI
 
 export const copy = (str: string) => navigator.clipboard.writeText(str);
 
-type JSONValue = null | boolean | number | string | JSONValue[] | { [k: string]: JSONValue };
 export const clone = (object: JSONValue) => JSON.parse(JSON.stringify(object));
 
 export const debug = (...vals: any) => vals.forEach((val: any) => console.log(JSON.stringify(val, null, 4)));

@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let name: string = ''
+    export let name: string = '';
     export let layout: string = '';
     export let grow: 0 | 1 = 1;
     export let shrink: 0 | 1 = 1;

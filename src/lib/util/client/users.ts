@@ -2,7 +2,7 @@ import CryptoES from 'crypto-es';
 import { createPublicClient, http } from 'viem';
 import { get, type Unsubscriber } from 'svelte/store';
 import { persistible } from '../store';
-import { decrypt, getNetworkId, getNetworks } from '../wallets';
+import { decrypt, getNetworkId, getChains, getNetworkRPC } from '../wallets';
 import { currentUser, type User } from './user';
 import { wallets, networks, clients } from './wallets';
 import { Wallet } from './wallet';
@@ -31,7 +31,7 @@ const _unsubscribeSession = currentSession.subscribe(session => {
             });
 
             networks.update(() => {
-                const networks = getNetworks(user.networks);
+                const networks = getChains(user.networks);
 
                 clients.set(networks.reduce((chains, chain) => {
                     const id = getNetworkId(chain.name);
@@ -40,7 +40,7 @@ const _unsubscribeSession = currentSession.subscribe(session => {
 
                     chains[id] = createPublicClient({
                         chain,
-                        transport: http()
+                        transport: http(getNetworkRPC(id))
                     });
 
                     return chains;
