@@ -4,6 +4,7 @@ import { type Wallet, encrypt } from '../wallets';
 
 type PinnedItemsType = {
     wallets?: boolean;
+    tokens?: boolean;
     send?: boolean;
     market?: boolean;
     analytics?: boolean;

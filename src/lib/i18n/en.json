@@ -1,6 +1,7 @@
 {
     "sidebar.dashboard": "Dashboard",
     "sidebar.wallets": "Wallets",
+    "sidebar.tokens": "Tokens",
     "sidebar.send": "Multisend",
     "sidebar.market": "Market",
     "sidebar.analytics": "Analytics",
