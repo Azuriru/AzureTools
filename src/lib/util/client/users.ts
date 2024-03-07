@@ -66,7 +66,9 @@ function createUser(name: string, password: string): User {
         name,
         password: hash,
         wallets: [],
-        pinned: {},
+        pinned: {
+            wallets: true
+        },
         networks: 1
     };
 }

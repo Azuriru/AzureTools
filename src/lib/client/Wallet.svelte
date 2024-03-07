@@ -10,9 +10,7 @@
     import { clients } from '$lib/util/client/wallets';
     import { getNetworkTokens } from '$lib/util/tokens';
     import { copy } from '$lib/util';
-    import { getChain, getNetworkName } from '$lib/util/wallets';
-
-    console.log(getChain(1));
+    import { getNetworkName } from '$lib/util/wallets';
 
     export let client: WalletInterface;
     export let compact: 0 | 1 = 0;
@@ -25,8 +23,8 @@
         'wallet.nfts'
     ] as const;
 
-    $: _tokens = $currentUser ? getNetworkTokens($currentUser.networks) : [];
-    $: tokens = Promise.all(_tokens.map(async ({ symbol, network, address }) => {
+    $: networkTokens = $currentUser ? getNetworkTokens($currentUser.networks) : [];
+    $: tokens = Promise.all(networkTokens.map(async ({ symbol, network, address }) => {
         const currentNetwork = $clients[network];
 
         if (currentNetwork) {
@@ -98,7 +96,7 @@
                 </Tab>
             {/each}
         </TabGroup>
-        <Column name="token-list" layout="w-full h-40 overflow-auto space-y-2 px-8">
+        <Column name="token-list" layout="w-full h-40 overflow-auto space-y-2 px-8 pb-4">
             {#await tokens}
                 <Row name="tokens-loading" justify={1} layout="h-full">
                     {$t('wallet.loading-tokens')}
