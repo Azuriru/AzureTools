@@ -54,9 +54,10 @@ export function getNetworkToken(network: Network): Token[] {
     }
 }
 
-export function getNetworkTokens(networks: number) {
+export function getNetworkTokens(networks?: number) {
     const tokens: Token[] = [];
 
+    if (!networks) return tokens;
     if (networks & NETWORKS.ETHEREUM) tokens.push(...getNetworkToken(NETWORKS.ETHEREUM));
     // if (networks & NETWORKS.SEPOLIA) tokens.push(NETWORK_KEYS.SEPOLIA);
     // if (networks & NETWORKS.GOERLI) tokens.push(NETWORK_KEYS.GOERLI);

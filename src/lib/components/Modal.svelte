@@ -67,7 +67,7 @@
             destroy() {
                 onDestroy();
             }
-        }
+        };
     }
 </script>
 

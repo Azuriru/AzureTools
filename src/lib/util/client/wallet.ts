@@ -12,7 +12,7 @@ export interface WalletInterface {
     account: PrivateKeyAccount;
 
     get address(): Hex;
-    getBalance(client: PublicClient, address: Address, abi?: Abi);
+    getBalance(client: PublicClient, address: Address, abi?: Abi): Promise<bigint>;
     getBalances(clients: Clients): Promise<BalancesType>;
 }
 
@@ -29,13 +29,13 @@ export class Wallet implements WalletInterface {
         return this.account.address;
     }
 
-    async getBalance(client: PublicClient, address: Address = this.address, abi: Abi = erc20Abi) {
+    async getBalance(client: PublicClient, address: Address = this.address, abi: Abi = erc20Abi): Promise<bigint> {
         return await client.readContract({
             address,
             abi,
             functionName: 'balanceOf',
             args: [ this.address ]
-        });
+        }) as Promise<bigint>;
     }
 
     async getBalances(clients: Clients): Promise<BalancesType> {

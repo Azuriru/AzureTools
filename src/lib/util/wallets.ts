@@ -1,8 +1,9 @@
 import CryptoES from 'crypto-es';
 import { type Hex, type Chain } from 'viem';
 import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet, polygon } from 'viem/chains';
+import type { ValueOf } from './types';
 
-export type Network = typeof NETWORKS[keyof typeof NETWORKS];
+export type Network = ValueOf<typeof NETWORKS>;
 export const NETWORKS = {
     ETHEREUM: 1,
     BSC: 2,
@@ -14,7 +15,7 @@ export const NETWORKS = {
 } as const;
 export const NETWORKS_ALL = Object.values(NETWORKS).reduce((c, v) => c + v, 0);
 
-export type NetworkNames = typeof NETWORK_NAMES[keyof typeof NETWORK_NAMES];
+export type NetworkNames = ValueOf<typeof NETWORK_NAMES>;
 export const NETWORK_NAMES = {
     ETHEREUM: 'Ethereum',
     BSC: 'BNB Smart Chain',
@@ -25,7 +26,7 @@ export const NETWORK_NAMES = {
     BSC_TESTNET: 'Binance Smart Chain Testnet'
 } as const;
 
-export type NetworKeys = typeof NETWORK_KEYS[keyof typeof NETWORK_KEYS];
+export type NetworkKeys = ValueOf<typeof NETWORK_KEYS>;
 export const NETWORK_KEYS = {
     ETHEREUM: 'networks.ethereum',
     BSC: 'networks.bsc',
@@ -36,7 +37,18 @@ export const NETWORK_KEYS = {
     BSC_TESTNET: 'networks.bsctest'
 } as const;
 
-export function getNetwork(network: Network): Chain {
+export type NetworkRPCs = ValueOf<typeof NETWORK_RPCS>;
+export const NETWORK_RPCS = {
+    ETHEREUM: 'https://go.getblock.io/c4599000cc5046ffaffb2e2a455397d1',
+    BSC: 'https://go.getblock.io/26b25c71cb46443c9683ad99b6fdca29',
+    POLYGON: 'https://go.getblock.io/2be973ac141b474abdb392aee51cc2fb',
+    SEPOLIA: 'https://go.getblock.io/d233dcde4966477bbb6fe8a805be61f0',
+    GOERLI: 'https://go.getblock.io/fe72d50e590e4695aeb1d0cc8ba87c27',
+    HOLESKY: 'https://go.getblock.io/8883166e207f4e05bfcd3b1d403c0b3c',
+    BSC_TESTNET: 'https://go.getblock.io/c2b981c62b0d4c84bb3c853008a964dc'
+} as const;
+
+export function getChain(network: Network): Chain {
     switch(network) {
         case NETWORKS.ETHEREUM:
             return mainnet;
@@ -57,7 +69,7 @@ export function getNetwork(network: Network): Chain {
     }
 }
 
-export function getNetworks(networks: number) {
+export function getChains(networks: number) {
     const nets: Chain[] = [];
 
     if (networks & NETWORKS.ETHEREUM) nets.push(mainnet);
@@ -69,6 +81,40 @@ export function getNetworks(networks: number) {
     if (networks & NETWORKS.POLYGON) nets.push(polygon);
 
     return nets;
+}
+
+export function getNetworks(networks: number) {
+    const nets: Network[] = [];
+
+    if (!networks) return nets;
+    if (networks & NETWORKS.ETHEREUM) nets.push(NETWORKS.ETHEREUM);
+    if (networks & NETWORKS.SEPOLIA) nets.push(NETWORKS.SEPOLIA);
+    if (networks & NETWORKS.GOERLI) nets.push(NETWORKS.GOERLI);
+    if (networks & NETWORKS.HOLESKY) nets.push(NETWORKS.HOLESKY);
+    if (networks & NETWORKS.BSC) nets.push(NETWORKS.BSC);
+    if (networks & NETWORKS.BSC_TESTNET) nets.push(NETWORKS.BSC_TESTNET);
+    if (networks & NETWORKS.POLYGON) nets.push(NETWORKS.POLYGON);
+
+    return nets;
+}
+
+export function getNetworkRPC(network: Network) {
+    switch(network) {
+        case NETWORKS.ETHEREUM:
+            return NETWORK_RPCS.ETHEREUM;
+        case NETWORKS.SEPOLIA:
+            return NETWORK_RPCS.SEPOLIA;
+        case NETWORKS.GOERLI:
+            return NETWORK_RPCS.GOERLI;
+        case NETWORKS.HOLESKY:
+            return NETWORK_RPCS.HOLESKY;
+        case NETWORKS.BSC:
+            return NETWORK_RPCS.BSC;
+        case NETWORKS.BSC_TESTNET:
+            return NETWORK_RPCS.BSC_TESTNET;
+        case NETWORKS.POLYGON:
+            return NETWORK_RPCS.POLYGON;
+    }
 }
 
 export function getNetworkName(network: Network) {
@@ -165,7 +211,7 @@ export function getNetworkCurrency(network?: string): string | void {
     }
 }
 
-export function getNetworkId(network?: string): number | void {
+export function getNetworkId(network?: string): Network | void {
     switch(network) {
         case NETWORK_NAMES.ETHEREUM:
             return NETWORKS.ETHEREUM;
