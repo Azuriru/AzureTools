@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Hex } from 'viem';
-    import { privateKeyToAccount } from 'viem/accounts';
+    import { privateKeyToAccount, generatePrivateKey } from 'viem/accounts';
     import { Tab, TabGroup, getToastStore } from '@skeletonlabs/skeleton';
     import { t } from '$lib/i18n';
     import { copy, startsWith } from '$lib/util';
@@ -8,12 +8,11 @@
     import { addWallet } from '$lib/util/client/user';
     import { MaterialSymbol, Button, Textarea, Modal, Input } from '$lib/components';
     import { Row } from '$lib/components/layout';
-    import { generatePrivateKey } from 'viem/accounts';
 
     const toastStore = getToastStore();
     const tablist = [
         'wallets.create',
-        'wallets.import'
+        'generic.import'
     ];
 
     let privateKeyModalShown = false;
@@ -144,23 +143,27 @@
     {#if privateKeyModalSelectedTab}
         <Textarea
             bind:value={privateKeysValue}
-            labelClass="mb-4"
+            labelClass="flex-col mb-4 font-semibold"
+            class="mt-2 font-normal"
             rows={6}
             placeholder={$t('wallets.import-placeholder')}
-            label={$t('wallets.import-label')}
-        />
+        >
+            {$t('wallets.import-label')}
+        </Textarea>
         <Button onClick={onImport}>
-            {$t('wallets.import')}
+            {$t('generic.import')}
         </Button>
     {:else}
         {#if privateKeysOutput}
             <Textarea
                 bind:value={privateKeysOutput}
-                labelClass="mb-4"
+                labelClass="flex-col mb-4 font-semibold"
+                class="mt-2 font-normal"
                 rows={6}
                 placeholder={$t('wallets.output-placeholder')}
-                label={$t('wallets.output-label')}
-            />
+            >
+                {$t('wallets.output-label')}
+            </Textarea>
             <Row layout="mb-3 space-x-3">
                 <Button width="w-full" onClick={onCreateMore}>
                     {$t('wallets.create-more')}

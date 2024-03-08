@@ -92,6 +92,14 @@
                 "omitLastInOneLineClassBody": false
             }
         ],
+        "@stylistic/js/object-curly-spacing": [
+            "warn",
+            "always",
+            {
+                "arraysInObjects": true,
+                "objectsInObjects": false
+            }
+        ],
         // Possible errors
         "svelte/infinite-reactive-loop": "warn",
         "svelte/no-dom-manipulating": "warn",

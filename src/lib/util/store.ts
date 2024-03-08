@@ -31,11 +31,11 @@ export const localStorageBacked = function<T>(key: string, initial: T) {
     return proxyStore(initial, source => {
         return {
             set(newValue) {
-                if (browser) { localStorage.setItem(key, JSON.stringify(newValue)); }
+                if (browser) localStorage.setItem(key, JSON.stringify(newValue));
                 return source.set(newValue);
             },
             update(updater) {
-                if (browser) { localStorage.setItem(key, JSON.stringify(source)); }
+                if (browser) localStorage.setItem(key, JSON.stringify(source));
                 return source.update(updater);
             },
             subscribe: (callback) => source.subscribe(callback),
@@ -90,9 +90,7 @@ export const persistible = function<T extends JSONValue>(localKey: string, initi
     const _unsub = proxy.subscribe(val => {
         if (data) data[localKey] = val;
 
-        if (browser) {
-            localStorage.setItem(centralizedKey, JSON.stringify(data));
-        }
+        if (browser) localStorage.setItem(centralizedKey, JSON.stringify(data));
     });
 
     return proxy;
