@@ -22,15 +22,12 @@
 <Column name="sidebar" grow={0} shrink={0} layout="group max-w-16 h-full py-2 bg-slate-800 hover:max-w-64 shadow-md z-10 transition-all overflow-hidden">
     <Column name="sidebar-start" grow={0}>
         <Row name="sidebar-item sidebar-logo" grow={0} layout="min-w-60 h-14 opacity-60 hover:opacity-100 transition-opacity">
-            <Row
-                name="sidebar-icon"
-                grow={0}
-                shrink={0}
-                justify={1}
-                layout="w-16 text-3xl"
+            <Link
+                href="/sandbox"
+                layout="sidebar-icon flex flex-shrink-0 justify-center items-center w-16 text-3xl"
             >
                 <img src="/logo.png" alt="logo" class="w-12" />
-            </Row>
+            </Link>
             <Row name="sidebar-title" layout="opacity-0 group-hover:opacity-100 transition-opacity">AZTools</Row>
         </Row>
         {#each sidebarItemsStart as item (item)}

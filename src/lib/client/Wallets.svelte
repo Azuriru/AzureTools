@@ -215,23 +215,24 @@
     </Row>
 {/if}
 
-<Modal bind:shown={exportShown} title={$t('wallets.export')}>
+<Modal bind:shown={exportShown} title={$t('wallets.export-wallets')}>
     <Input
         bind:value={exportPassword}
         labelClass="text-sm flex-col font-semibold mb-4"
         class="mt-2 font-normal"
         placeholder={$t('wallets.export-prompt-placeholder')}
     >
-        {$t('wallets.export-prompt')}
+        {$t('wallets.export-prompt-label')}
     </Input>
-    <Button onClick={onExport}>{$t('wallets.export')}</Button>
+    <Button onClick={onExport}>{$t('generic.export')}</Button>
 </Modal>
 
-<Modal bind:shown={exportKeysShown} title={$t('wallets.export')}>
+<Modal bind:shown={exportKeysShown} title={$t('generic.export')}>
     <Textarea
+        bind:value={exportKeys}
         labelClass="flex-col text-sm font-semibold mb-4"
         class="mt-2 font-normal"
-        bind:value={exportKeys}
+        placeholder={$t('wallets.export-placeholder')}
     >
         {$t('wallets.export-label')}
     </Textarea>

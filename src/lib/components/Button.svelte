@@ -3,6 +3,7 @@
     import { type MaterialSymbol } from 'material-symbols';
     import Icon from './MaterialSymbol.svelte';
 
+    export let disabled = false;
     export let type: 0 | 1 | 2 = 1;
     export let thin = 0;
     export let width = 'flex-grow';
@@ -24,7 +25,7 @@
     }
 </script>
 
-<button type="button" on:click={onClick} class="btn {classes}">
+<button type="button" on:click={onClick} class="btn {classes}" {disabled}>
     {#if icon}
         <Icon name={icon} />
     {/if}
