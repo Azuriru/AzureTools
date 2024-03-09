@@ -169,7 +169,7 @@
                     {$t('wallets.create-more')}
                 </Button>
                 <Button width="w-full" onClick={() => onImportCreated()}>
-                    {$t('wallets.import')}
+                    {$t('generic.import')}
                 </Button>
                 <Button width="w-9 flex-shrink-0" layout="text-xl px-0 h-9" onClick={() => copy(privateKeysOutput)}>
                     <MaterialSymbol name="content_copy" />

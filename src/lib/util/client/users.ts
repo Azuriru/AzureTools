@@ -1,11 +1,13 @@
 import CryptoES from 'crypto-es';
-import { createPublicClient, http } from 'viem';
 import { get, type Unsubscriber } from 'svelte/store';
+import { createPublicClient, http } from 'viem';
 import { persistible } from '../store';
-import { decrypt, getNetworkId, getChains, getNetworkRPC } from '../wallets';
+import { getNetworkTokens } from '../tokens';
+import { decrypt, getChains, getNetworkId, getNetworkRPC, readContract } from '../wallets';
+import { tokenCache } from './cache';
 import { currentUser, type User } from './user';
-import { wallets, networks, clients } from './wallets';
 import { Wallet } from './wallet';
+import { clients, networks, wallets } from './wallets';
 
 export const users = persistible<User[]>('users', []);
 export const currentSession = persistible<string | null>('session', null);
@@ -32,6 +34,7 @@ const _unsubscribeSession = currentSession.subscribe(session => {
 
             networks.update(() => {
                 const networks = getChains(user.networks);
+                const tokens = [ ...getNetworkTokens(user.networks), ...user.tokens ];
 
                 clients.set(networks.reduce((chains, chain) => {
                     const id = getNetworkId(chain.name);
@@ -41,6 +44,22 @@ const _unsubscribeSession = currentSession.subscribe(session => {
                     chains[id] = createPublicClient({
                         chain,
                         transport: http(getNetworkRPC(id))
+                    });
+
+                    tokenCache.update(cache => {
+                        const getMetadata = async (address: `0x${string}`) => {
+                            return {
+                                name: await readContract<string>(chains[id], address, 'name') || 'token.no-name',
+                                decimals: await readContract<number>(chains[id], address, 'decimals') || 18,
+                                symbol: await readContract<string>(chains[id], address, 'symbol') || 'token.no-symbol'
+                            };
+                        };
+
+                        for (const { address } of tokens.filter(token => token.network === id)) {
+                            cache[address] = getMetadata(address);
+                        }
+
+                        return cache;
                     });
 
                     return chains;
