@@ -24,12 +24,11 @@
     ] as const;
 
     $: networkTokens = $currentUser ? getNetworkTokens($currentUser.networks) : [];
-    $: tokens = Promise.all(networkTokens.map(async ({ symbol, network, address }) => {
+    $: tokens = Promise.all(networkTokens.map(async ({ network, address }) => {
         const currentNetwork = $clients[network];
 
         if (currentNetwork) {
             return {
-                symbol,
                 network,
                 balance: await client.getBalance(currentNetwork, address)
             };
@@ -110,7 +109,8 @@
                 {:then tokens}
                     {#each tokens as token (token)}
                         {#if token}
-                            {@const { symbol, balance, network } = token}
+                            {@const { balance, network } = token}
+                            {@const symbol = 'x'}
                             <Row name="token" grow={0} justify={3}>
                                 <Row name="token-data" grow={0} shrink={0} layout="mr-3">
                                     <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />

@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { createPublicClient, http, type Hex, type PublicClient } from 'viem';
+    import { createPublicClient, http, type Hex } from 'viem';
     import { getToastStore } from '@skeletonlabs/skeleton';
     import { t } from '$lib/i18n';
     import { startsWith } from '$lib/util';
-    import abi from '$lib/util/abi';
     import { toastMessage } from '$lib/util/toast';
-    import { NETWORKS_ALL, getNetworkNames, getNetworks, type Network, getChain, getNetworkRPC } from '$lib/util/wallets';
+    import { readContract, getNetworkNames, getNetworks, getChain, getNetworkRPC, NETWORKS_ALL, type Network } from '$lib/util/wallets';
     import { addToken } from '$lib/util/client/user';
     import { MaterialSymbol, Button, Modal, Input, Dropdown } from '$lib/components';
     import { Row } from '$lib/components/layout';
@@ -13,7 +12,7 @@
     const toastStore = getToastStore();
     const options = ['tokens.import-network-placeholder', ...getNetworkNames(NETWORKS_ALL)];
 
-    let tokenModalShown = true;
+    let tokenModalShown = false;
     let tokenAddress = '';
     let tokenNetwork: 0 | Network = 0;
     let tokenSymbol = '';
@@ -36,11 +35,11 @@
                 transport: http(getNetworkRPC(network as Network))
             });
 
-            const symbol = await get(client, tokenAddress as Hex, 'symbol');
-            updateSymbol(symbol as string || '');
+            const symbol = await readContract<string>(client, tokenAddress as Hex, 'symbol');
+            updateSymbol(symbol || '');
 
-            const decimals = await get(client, tokenAddress as Hex, 'decimals');
-            updateDecimals(decimals as string || '');
+            const decimals = await readContract<string>(client, tokenAddress as Hex, 'decimals');
+            updateDecimals(decimals || '');
 
             if (!symbol || !decimals) {
                 toastStore.trigger(toastMessage('tokens.import-error-generic'));
@@ -49,16 +48,6 @@
     })();
 
     $: tokenImportDisabled = !(tokenSymbol && tokenDecimal);
-
-    async function get(client: PublicClient, address: Hex, functionName: string) {
-        try {
-            return await client.readContract({
-                functionName,
-                address,
-                abi
-            });
-        } catch { /* meh */ }
-    }
 
     function updateSymbol(symbol: string) {
         tokenSymbol = symbol;
@@ -79,7 +68,6 @@
 
         addToken({
             address: tokenAddress as Hex,
-            symbol: tokenSymbol,
             network: network as Network
         });
         tokenModalShown = false;

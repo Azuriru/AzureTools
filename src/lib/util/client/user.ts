@@ -39,12 +39,11 @@ export function removeWallet(privateKey: Hex) {
     });
 }
 
-export function addToken({ address, symbol, network }: Token) {
+export function addToken({ address, network }: Token) {
     currentUser.update(user => {
         if (!user) return user;
         user.tokens.push({
             address,
-            symbol,
             network
         });
         return user;

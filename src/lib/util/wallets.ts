@@ -1,7 +1,8 @@
 import CryptoES from 'crypto-es';
-import { type Hex, type Chain } from 'viem';
+import { type Hex, type Chain, type PublicClient } from 'viem';
 import { mainnet, goerli, sepolia, holesky, bsc, bscTestnet, polygon } from 'viem/chains';
 import type { ValueOf } from './types';
+import abi from '$lib/util/abi';
 
 export type Network = ValueOf<typeof NETWORKS>;
 export const NETWORKS = {
@@ -227,6 +228,18 @@ export function getNetworkId(network?: string): Network | void {
             return NETWORKS.BSC_TESTNET;
         case NETWORK_NAMES.POLYGON:
             return NETWORKS.POLYGON;
+    }
+}
+
+export async function readContract<T>(client: PublicClient, address: Hex, functionName: string): Promise<T | null> {
+    try {
+        return await client.readContract({
+            functionName,
+            address,
+            abi
+        }) as Promise<T>;
+    } catch {
+        return null;
     }
 }
 
