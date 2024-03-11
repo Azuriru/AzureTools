@@ -51,7 +51,8 @@ const _unsubscribeSession = currentSession.subscribe(session => {
                             return {
                                 name: await readContract<string>(chains[id], address, 'name') || 'token.no-name',
                                 decimals: await readContract<number>(chains[id], address, 'decimals') || 18,
-                                symbol: await readContract<string>(chains[id], address, 'symbol') || 'token.no-symbol'
+                                symbol: await readContract<string>(chains[id], address, 'symbol') || 'token.no-symbol',
+                                network: id
                             };
                         };
 
