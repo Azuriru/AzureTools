@@ -8,10 +8,10 @@
     import { Tab, TabGroup } from '@skeletonlabs/skeleton';
     import { currentUser } from '$lib/util/client/user';
     import { clients } from '$lib/util/client/wallets';
+    import { tokenCache } from '$lib/util/client/cache';
     import { getNetworkTokens } from '$lib/util/tokens';
     import { copy } from '$lib/util';
     import { getNetworkName } from '$lib/util/wallets';
-
     export let client: WalletInterface;
     export let compact: 0 | 1 = 0;
 
@@ -29,8 +29,8 @@
 
         if (currentNetwork) {
             return {
-                network,
-                balance: await client.getBalance(currentNetwork, address)
+                balance: await client.getBalance(currentNetwork, address),
+                ...await $tokenCache[address]
             };
         }
 
@@ -109,8 +109,7 @@
                 {:then tokens}
                     {#each tokens as token (token)}
                         {#if token}
-                            {@const { balance, network } = token}
-                            {@const symbol = 'x'}
+                            {@const { balance, network, symbol } = token}
                             <Row name="token" grow={0} justify={3}>
                                 <Row name="token-data" grow={0} shrink={0} layout="mr-3">
                                     <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />
