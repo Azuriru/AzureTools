@@ -11,7 +11,7 @@
             <Wallets compact={1} dashboard={1} />
         {/if}
         {#if $currentUser.pinned.tokens}
-            <Tokens />
+            <Tokens dashboard={1} />
         {/if}
         {#if $currentUser.pinned.send}
             <Multisend />
