@@ -1,7 +1,4 @@
 <script lang="ts">
-    import { Button } from '$lib/components';
-    import { Column, Row } from '$lib/components/layout';
-
     const center = 'flex justify-center items-center';
 </script>
 
