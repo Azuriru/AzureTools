@@ -43,7 +43,7 @@
         layout="wallet flex flex-shrink-0 py-2 pl-4 pr-2 rounded overflow-hidden bg-slate-600"
         href="/wallets/{address}"
     >
-        <Button type={0} layout="address flex-grow-0 w-2/5 text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
+        <Button type={0} layout="address flex-grow-0 w-2/5 text-lg" onClick={(e) => (e.stopPropagation(), copy(address))}>
             <span class="flex-1 overflow-hidden text-ellipsis text-sm">{address}</span>
             <MaterialSymbol name="content_copy" />
         </Button>
@@ -62,7 +62,7 @@
                 {/each}
             {/await}
         </Row>
-        <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.preventDefault(), removeWallet(privateKey))}>
+        <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.stopPropagation(), removeWallet(privateKey))}>
             <MaterialSymbol name="close" />
         </Button>
     </Link>
