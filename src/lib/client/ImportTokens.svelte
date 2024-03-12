@@ -5,9 +5,10 @@
     import { startsWith } from '$lib/util';
     import { toastMessage } from '$lib/util/toast';
     import { readContract, getNetworkNames, getNetworks, getChain, getNetworkRPC, NETWORKS_ALL, type Network } from '$lib/util/wallets';
-    import { addToken } from '$lib/util/client/user';
+    import { addToken, currentUser } from '$lib/util/client/user';
     import { MaterialSymbol, Button, Modal, Input, Dropdown } from '$lib/components';
     import { Row } from '$lib/components/layout';
+    import { findDuplicateToken, getNetworkTokens } from '$lib/util/tokens';
 
     const toastStore = getToastStore();
     const options = ['tokens.import-network-placeholder', ...getNetworkNames(NETWORKS_ALL)];
@@ -66,6 +67,11 @@
             return toastStore.trigger(toastMessage('tokens.import-error-invalid'));
         }
 
+        if (findDuplicateToken(tokenAddress as Hex, getNetworkTokens(NETWORKS_ALL)) ||
+            $currentUser && findDuplicateToken(tokenAddress as Hex, $currentUser.tokens)) {
+            return toastStore.trigger(toastMessage('tokens.import-error-duplicate'));
+        }
+
         addToken({
             address: tokenAddress as Hex,
             network: network as Network
@@ -85,7 +91,7 @@
 <Button
     type={0}
     bg="bg-cyan-500"
-    layout="w-16 h-16 fixed bottom-8 right-8 z-10 shadow-xl rounded-full text-5xl"
+    layout="w-16 h-16 absolute bottom-8 right-8 z-10 shadow-xl rounded-full text-5xl"
     onClick={() => tokenModalShown = !tokenModalShown}
 >
     <MaterialSymbol name="add" />

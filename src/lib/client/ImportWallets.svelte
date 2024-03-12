@@ -117,7 +117,7 @@
 <Button
     type={0}
     bg="bg-cyan-500"
-    layout="w-16 h-16 fixed bottom-8 right-8 z-10 shadow-xl rounded-full text-5xl"
+    layout="w-16 h-16 absolute bottom-8 right-8 z-10 shadow-xl rounded-full text-5xl"
     onClick={() => privateKeyModalShown = !privateKeyModalShown}
 >
     <MaterialSymbol name="add" />

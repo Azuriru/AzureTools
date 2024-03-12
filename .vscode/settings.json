@@ -1,6 +1,6 @@
 {
     "eslint.validate": [
-        "svelte"
+        "svelte",
     ],
     "eslint.format.enable": true,
     "eslint.lintTask.enable": true,

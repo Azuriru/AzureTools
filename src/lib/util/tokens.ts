@@ -58,3 +58,25 @@ export function getNetworkTokens(networks?: number) {
 
     return tokens;
 }
+
+export function filterTokenByNetwork(tokens: Token[], network: Network): Token[] {
+    return tokens.filter(token => token.network === network);
+}
+
+export function filterTokenByNetworks(tokens: Token[], networks: number) {
+    const _tokens: Token[] = [];
+
+    if (networks & NETWORKS.ETHEREUM) _tokens.push(...filterTokenByNetwork(tokens, NETWORKS.ETHEREUM));
+    // if (networks & NETWORKS.SEPOLIA) tokens.push(NETWORK_KEYS.SEPOLIA);
+    // if (networks & NETWORKS.GOERLI) tokens.push(NETWORK_KEYS.GOERLI);
+    // if (networks & NETWORKS.HOLESKY) tokens.push(NETWORK_KEYS.HOLESKY);
+    if (networks & NETWORKS.BSC) _tokens.push(...filterTokenByNetwork(tokens, NETWORKS.BSC));
+    // if (networks & NETWORKS.BSC_TESTNET) tokens.push(NETWORK_KEYS.BSC_TESTNET);
+    // if (networks & NETWORKS.POLYGON) tokens.push(NETWORK_KEYS.POLYGON);
+
+    return _tokens;
+}
+
+export function findDuplicateToken(address: TokenAddress, tokens: Token[]) {
+    return tokens.find(token => token.address === address);
+}

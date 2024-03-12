@@ -96,7 +96,7 @@
                 </Tab>
             {/each}
         </TabGroup>
-        <Column name="tab-content" layout="w-full h-40 overflow-auto space-y-2 px-8 pb-4">
+        <Column name="tab-content" layout="w-full h-52 overflow-auto space-y-2 px-8 pb-4">
             {#if selectedTab}
                 <Row name="nft-loading" justify={1} layout="w-full h-40 px-8 pb-">
                     {$t('wallet.loading-nft')}

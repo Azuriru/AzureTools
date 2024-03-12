@@ -5,4 +5,4 @@
 </script>
 
 <Wallets {compact} />
-<ImportWallets />
+<!-- <ImportWallets /> -->
