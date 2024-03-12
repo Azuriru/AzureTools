@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { Tokens, ImportTokens } from '$lib/client';
+    import { Tokens } from '$lib/client';
 </script>
 
 <Tokens />
-<!-- <ImportTokens /> -->

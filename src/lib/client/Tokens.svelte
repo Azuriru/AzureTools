@@ -1,14 +1,13 @@
 <script lang="ts">
     import { t } from '$lib/i18n';
-    import { getNetworkFiles, getNetworkName, getNetworkNames } from '$lib/util/wallets';
+    import { getNetworkName } from '$lib/util/wallets';
     import { filterTokenByNetworks, getNetworkTokens } from '$lib/util/tokens';
     import { tokenCache } from '$lib/util/client/cache';
     import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
-    import { replacer } from '$lib/util';
     import ImportTokens from './ImportTokens.svelte';
 
-    export let dashboard: 0 | 1 = 0;
+    // export let dashboard: 0 | 1 = 0;
 
     $: currentTokens = $currentUser
         ? [...getNetworkTokens($currentUser.networks), ...filterTokenByNetworks($currentUser.tokens, $currentUser.networks)]
