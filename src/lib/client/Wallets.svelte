@@ -7,7 +7,7 @@
     import { currentUser } from '$lib/util/client/user';
     import { clients, wallets } from '$lib/util/client/wallets';
     import { decrypt, getNetworkCurrency } from '$lib/util/wallets';
-    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea } from '$lib/components';
+    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Link } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
     import Wallet from './Wallet.svelte';
     import ImportWallets from './ImportWallets.svelte';
@@ -99,13 +99,9 @@
                                 <MaterialSymbol name="grid_view" />
                             </Button>
                             <Divider vr={1} color="border-slate-600" spacing="" />
-                            <Button
-                                onClick={() => {}}
-                                type={0}
-                                layout={mini}
-                            >
+                            <Link href="/wallets/settings" layout="flex justify-center items-center {mini}">
                                 <MaterialSymbol name="settings" />
-                            </Button>
+                            </Link>
                         {/if}
                     </Row>
                 </Row>
