@@ -5,9 +5,10 @@
     import { tokenCache } from '$lib/util/client/cache';
     import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
+    import { Button, Input, MaterialSymbol } from '$lib/components';
     import ImportTokens from './ImportTokens.svelte';
 
-    // export let dashboard: 0 | 1 = 0;
+    export let dashboard: 0 | 1 = 0;
 
     $: currentTokens = $currentUser
         ? [...getNetworkTokens($currentUser.networks), ...filterTokenByNetworks($currentUser.tokens, $currentUser.networks)]
@@ -18,8 +19,40 @@
 </script>
 
 <Column name="tokens" layout="relative h-full">
-    <Row name="token-settings">
-        arejflkmaew
+    <Row name="token-settings" justify={3} grow={0} layout="mb-2">
+        {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
+        {@const border = dashboard ? '' : 'rounded border-2 border-solid border-slate-600'}
+
+        <Input
+            size={1}
+            class="[&:not(:focus)]:p-0 w-0 focus:w-full {dashboard
+                ? '!p-0'
+                : ''}"
+            labelClass="search rounded {border} {dashboard
+                ? 'has-[:focus]:bg-slate-700'
+                : ''} has-[:focus]:flex-grow transition-all has-[:focus]:mr-2 overflow-hidden"
+            background=""
+        >
+            <Row
+                grow={0}
+                shrink={0}
+                justify={1}
+                layout="flex-shrink-0 {mini} pointer-events-none"
+            >
+                <MaterialSymbol name="search" />
+            </Row>
+        </Input>
+        <Row grow={0} name="controls-right" layout="h-full">
+            <Row name="settings" grow={0} layout="h-full rounded {border}">
+                <Button
+                    type={0}
+                    bg=""
+                    layout={mini}
+                >
+                    <MaterialSymbol name="settings" fill={dashboard} />
+                </Button>
+            </Row>
+        </Row>
     </Row>
     <Column name="token-list" layout="bg-slate-700 rounded gap-2 p-2 h-full overflow-auto">
         {#each tokens as token (token)}
