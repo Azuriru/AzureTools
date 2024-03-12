@@ -5,7 +5,7 @@
     import { tokenCache } from '$lib/util/client/cache';
     import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
-    import { Button, Input, MaterialSymbol } from '$lib/components';
+    import { Input, Link, MaterialSymbol } from '$lib/components';
     import ImportTokens from './ImportTokens.svelte';
 
     export let dashboard: 0 | 1 = 0;
@@ -44,13 +44,9 @@
         </Input>
         <Row grow={0} name="controls-right" layout="h-full">
             <Row name="settings" grow={0} layout="h-full rounded {border}">
-                <Button
-                    type={0}
-                    bg=""
-                    layout={mini}
-                >
+                <Link href="/tokens/settings" layout="flex justify-center items-center {mini}">
                     <MaterialSymbol name="settings" fill={dashboard} />
-                </Button>
+                </Link>
             </Row>
         </Row>
     </Row>
