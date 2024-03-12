@@ -63,6 +63,7 @@
     "tokens.import-error-generic": "Unable to fetch metadata from token contract adddress",
     "tokens.import-error-empty": "One or more fields are empty",
     "tokens.import-error-invalid": "Invalid token contract adddress!",
+    "tokens.import-error-duplicate": "This token already exists",
     "tokens.import-success": "Successfully imported {x} token!",
     "token.loading-data": "Loading token data...",
     "generic.create": "Create",

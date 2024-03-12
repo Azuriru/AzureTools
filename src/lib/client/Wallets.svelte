@@ -10,6 +10,7 @@
     import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Toggle } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
     import Wallet from './Wallet.svelte';
+    import ImportWallets from './ImportWallets.svelte';
 
     export let compact: 0 | 1 = 0;
     export let dashboard: 0 | 1 = 0;
@@ -62,7 +63,7 @@
 <svelte:window on:click={onClick} />
 
 {#if $currentUser?.wallets.length}
-    <Column name="wallets" layout="h-full">
+    <Column name="wallets" layout="h-full relative">
         {@const mini = dashboard ? 'text-2xl' : 'text-3xl w-12 h-12'}
         {@const border = dashboard ? '' : 'rounded border-2 border-solid border-slate-600'}
 
@@ -202,6 +203,7 @@
                 {/each}
             </Column>
         </Column>
+        <ImportWallets />
     </Column>
 {:else}
     <Row
@@ -209,11 +211,13 @@
         shrink={0}
         align={1}
         justify={1}
-        layout="h-full bg-slate-700 rounded p-4 text-center"
+        layout="h-full bg-slate-700 rounded p-4 text-center relative"
     >
         {$t('wallets.empty')}
+        <ImportWallets />
     </Row>
 {/if}
+
 
 <Modal bind:shown={exportShown} title={$t('wallets.export-wallets')}>
     <Input
