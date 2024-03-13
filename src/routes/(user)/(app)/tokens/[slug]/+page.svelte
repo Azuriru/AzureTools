@@ -6,7 +6,7 @@
     import { getNetworkName, type Network } from '$lib/util/wallets';
     import { tokenCache } from '$lib/util/client/cache';
     import { Column, Row } from '$lib/components/layout';
-    import { Divider, Toggle, Truncate } from '$lib/components';
+    import { Divider, Link, MaterialSymbol, Toggle, Truncate } from '$lib/components';
     import { wallets, clients } from '$lib/util/client/wallets';
     import type { WalletInterface } from '$lib/util/client/wallet';
 
@@ -23,8 +23,16 @@
     }
 </script>
 
-{#if $tokenCache[data.slug]}
-    <Column name="token" layout="bg-slate-700 rounded gap-2 px-4 md:px-10 py-6 h-full">
+<Column name="token" layout="bg-slate-700 rounded gap-2 px-4 md:px-10 py-6 h-full">
+    <Row grow={0} layout="mb-6">
+        <Link href="/tokens" layout="flex p-2 flex-shrink-0 justify-center items-center rounded-full bg-slate-600 text-3xl w-10 h-10 mr-4">
+            <MaterialSymbol name="chevron_left" />
+        </Link>
+        <Truncate layout="text-3xl font-medium">
+            Token Info
+        </Truncate>
+    </Row>
+    {#if $tokenCache[data.slug]}
         {#await $tokenCache[data.slug]}
             <Row name="token-loading"align={1} justify={1} layout="h-full">
                 Loading token...
@@ -70,9 +78,9 @@
                 {/each}
             </Column>
         {/await}
-    </Column>
-{:else}
-    <Column name="token" align={1} justify={1} layout="bg-slate-700 rounded h-full text-xl">
-        No such token exists
-    </Column>
-{/if}
+    {:else}
+        <Column name="token" align={1} justify={1} layout="h-full text-xl">
+            No such token exists
+        </Column>
+    {/if}
+</Column>
