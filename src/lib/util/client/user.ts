@@ -1,7 +1,7 @@
 import { type Hex } from 'viem';
-import { writable } from 'svelte/store';
 import { type Wallet, encrypt } from '../wallets';
-import type { Token } from '../tokens';
+import { type Token } from '../tokens';
+import { writable } from 'svelte/store';
 
 type PinnedItemsType = {
     wallets?: boolean;
@@ -12,7 +12,10 @@ type PinnedItemsType = {
 }
 
 type SettingsType = {
-    tokens: Hex[];
+    tokens: {
+        disabled: Record<string, boolean>;
+        visibility: Record<string, boolean>;
+    }
     // wallets: Hex[];
 }
 

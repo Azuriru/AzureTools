@@ -5,10 +5,11 @@
     import { t } from '$lib/i18n';
     import { getNetworkName, type Network } from '$lib/util/wallets';
     import { tokenCache } from '$lib/util/client/cache';
+    import { type WalletInterface } from '$lib/util/client/wallet';
+    import { wallets, clients } from '$lib/util/client/wallets';
+    import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
     import { Divider, Link, MaterialSymbol, Toggle, Truncate } from '$lib/components';
-    import { wallets, clients } from '$lib/util/client/wallets';
-    import type { WalletInterface } from '$lib/util/client/wallet';
 
     export let data: PageData;
 
@@ -21,6 +22,34 @@
 
         return null;
     }
+
+
+    function toggleVisibility() {
+        if (!$currentUser) return;
+
+        if (isVisible) {
+            $currentUser.settings.tokens.visibility[data.slug] = false;
+        } else {
+            $currentUser.settings.tokens.visibility[data.slug] = true;
+        }
+
+        $currentUser.settings = $currentUser.settings;
+    }
+
+    function toggleDisability() {
+        if (!$currentUser) return;
+
+        if (isDisabled) {
+            $currentUser.settings.tokens.disabled[data.slug] = false;
+        } else {
+            $currentUser.settings.tokens.disabled[data.slug] = true;
+        }
+
+        $currentUser.settings = $currentUser.settings;
+    }
+
+    $: isVisible = $currentUser?.settings.tokens.visibility[data.slug];
+    $: isDisabled = $currentUser?.settings.tokens.disabled[data.slug];
 </script>
 
 <Column name="token" layout="bg-slate-700 rounded gap-2 px-4 md:px-10 py-6 h-full">
@@ -32,7 +61,7 @@
             Token Info
         </Truncate>
     </Row>
-    {#if $tokenCache[data.slug]}
+    {#if $tokenCache[data.slug] && $currentUser}
         {#await $tokenCache[data.slug]}
             <Row name="token-loading"align={1} justify={1} layout="h-full">
                 Loading token...
@@ -48,12 +77,12 @@
             </Column>
             <Row grow={0} layout="min-w-0">
                 <Truncate>Show in wallets</Truncate>
-                <Toggle checked={false} labelClass="ml-4" />
+                <Toggle checked={!!isVisible} labelClass="ml-4" onChange={toggleVisibility}  />
             </Row>
             <Divider spacing="my-2" />
             <Row grow={0} layout="min-w-0 mb-8">
                 <Truncate>Enable this token</Truncate>
-                <Toggle checked={false} labelClass="ml-4" />
+                <Toggle checked={!!isDisabled} labelClass="ml-4" onChange={toggleDisability} />
             </Row>
             <Column name="wallets" grow={0} layout="min-w-0 w-full">
                 <span class="text-xl font-semibold mb-4">Wallets</span>
