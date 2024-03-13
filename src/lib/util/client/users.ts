@@ -4,7 +4,7 @@ import { createPublicClient, http } from 'viem';
 import { persistible } from '../store';
 import { getNetworkTokens } from '../tokens';
 import { decrypt, getChains, getNetworkId, getNetworkRPC, readContract } from '../wallets';
-import { tokenCache } from './cache';
+import { tokenCache, type TokenCache } from './cache';
 import { currentUser, type User } from './user';
 import { Wallet } from './wallet';
 import { clients, networks, wallets } from './wallets';
@@ -24,6 +24,7 @@ const _unsubscribeSession = currentSession.subscribe(session => {
         currentUserUnsubscribe = currentUser.subscribe((user) => {
             users.update(users => users);
 
+            console.log('cache loading');
             if (!user) return;
 
             wallets.update(() => {
@@ -46,7 +47,7 @@ const _unsubscribeSession = currentSession.subscribe(session => {
                         transport: http(getNetworkRPC(id))
                     });
 
-                    tokenCache.update(cache => {
+                    tokenCache.update((cache: TokenCache) => {
                         const getMetadata = async (address: `0x${string}`) => {
                             return {
                                 name: await readContract<string>(chains[id], address, 'name') || 'token.no-name',
@@ -57,6 +58,8 @@ const _unsubscribeSession = currentSession.subscribe(session => {
                         };
 
                         for (const { address } of tokens.filter(token => token.network === id)) {
+                            if (Object.prototype.hasOwnProperty.call(cache, address)) continue;
+
                             cache[address] = getMetadata(address);
                         }
 
@@ -90,7 +93,10 @@ function createUser(name: string, password: string): User {
         pinned: {
             wallets: true
         },
-        networks: 1
+        networks: 1,
+        settings: {
+            tokens: []
+        }
     };
 }
 

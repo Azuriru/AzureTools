@@ -14,6 +14,7 @@
         ? [...getNetworkTokens($currentUser.networks), ...filterTokenByNetworks($currentUser.tokens, $currentUser.networks)]
         : [];
     $: tokens = currentTokens.map(async ({ address }) => ({
+        address,
         ...await $tokenCache[address]
     }));
 </script>
@@ -42,12 +43,10 @@
                 <MaterialSymbol name="search" />
             </Row>
         </Input>
-        <Row grow={0} name="controls-right" layout="h-full">
-            <Row name="settings" grow={0} layout="h-full rounded {border}">
-                <Link href="/tokens/settings" layout="flex justify-center items-center {mini}">
-                    <MaterialSymbol name="settings" fill={dashboard} />
-                </Link>
-            </Row>
+        <Row name="settings" grow={0} layout="h-full rounded {border}">
+            <Link href="/tokens/settings" layout="flex justify-center items-center {mini}">
+                <MaterialSymbol name="settings" fill={dashboard} />
+            </Link>
         </Row>
     </Row>
     <Column name="token-list" layout="bg-slate-700 rounded gap-2 p-2 h-full overflow-auto">
@@ -57,19 +56,21 @@
                     <Row justify={1} layout="order-1">
                         {$t('token.loading-data')}
                     </Row>
-                {:then { name, symbol, network }}
-                    <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />
-                    <Column layout="min-w-0">
-                        <span class="font-semibold truncate">
-                            {name}
-                        </span>
-                        <span class="text-xs truncate">
-                            {$t(getNetworkName(network))}
-                        </span>
-                    </Column>
-                    <Row grow={0}>
-                        {symbol}
-                    </Row>
+                {:then { name, symbol, network, address }}
+                    <Link href="/tokens/{address}" layout="flex flex-grow">
+                        <img src="/tokens/unknown.png" alt={symbol} class="w-10 rounded-xl mr-2" />
+                        <Column layout="min-w-0">
+                            <span class="font-semibold truncate">
+                                {name}
+                            </span>
+                            <span class="text-xs truncate">
+                                {$t(getNetworkName(network))}
+                            </span>
+                        </Column>
+                        <Row grow={0}>
+                            {symbol}
+                        </Row>
+                    </Link>
                 {/await}
             </Row>
         {/each}
