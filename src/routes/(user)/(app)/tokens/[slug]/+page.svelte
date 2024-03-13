@@ -1,19 +1,16 @@
 
 <script lang="ts">
-    import { formatEther, walletActions, type Hex } from 'viem';
+    import { formatEther, type Hex } from 'viem';
     import type { PageData } from './$types';
     import { t } from '$lib/i18n';
     import { getNetworkName, type Network } from '$lib/util/wallets';
     import { tokenCache } from '$lib/util/client/cache';
-    import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
     import { Divider, Toggle, Truncate } from '$lib/components';
     import { wallets, clients } from '$lib/util/client/wallets';
     import type { WalletInterface } from '$lib/util/client/wallet';
 
     export let data: PageData;
-
-    $: token = $tokenCache[data.slug];
 
     async function getBalance(wallet: WalletInterface, network: Network, address: string) {
         const currentNetwork = $clients[network];
@@ -26,13 +23,17 @@
     }
 </script>
 
-{#if token}
-    {#await token then token}
-        {@const { name, network, symbol } = token}
-        <Column name="token" layout="bg-slate-700 rounded gap-2 px-4 md:px-10 py-6 h-full">
-            <Column grow={0} align={1} layout="md:flex-row md:h-40 mb-8 px-4">
-                <img src="/tokens/unknown.png" alt={name} class="rounded-xl h-full w-28 mb-4 md:mr-8" />
-                <Column name="token-metadata" layout="min-w-0 w-full text-center">
+{#if $tokenCache[data.slug]}
+    <Column name="token" layout="bg-slate-700 rounded gap-2 px-4 md:px-10 py-6 h-full">
+        {#await $tokenCache[data.slug]}
+            <Row name="token-loading"align={1} justify={1} layout="h-full">
+                Loading token...
+            </Row>
+        {:then token}
+            {@const { name, network, symbol } = token}
+            <Column name="token-info" grow={0} align={1} layout="md:flex-row md:h-40 mb-8 px-4 md:px-0">
+                <img src="/tokens/unknown.png" alt={name} class="token-image rounded-xl h-full w-28 md:w-auto mb-4 md:mb-0 md:mr-12" />
+                <Column name="token-metadata" layout="min-w-0 w-full text-center md:text-left">
                     <Truncate layout="font-semibold text-xl md:text-3xl mb-1">{name} ({symbol})</Truncate>
                     <Truncate layout="md:text-xl">{$t(getNetworkName(network))}</Truncate>
                 </Column>
@@ -68,10 +69,10 @@
                     </Row>
                 {/each}
             </Column>
-        </Column>
-    {/await}
+        {/await}
+    </Column>
 {:else}
     <Column name="token" align={1} justify={1} layout="bg-slate-700 rounded h-full text-xl">
-        404: Token not found
+        No such token exists
     </Column>
 {/if}
