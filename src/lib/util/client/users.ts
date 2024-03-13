@@ -24,7 +24,6 @@ const _unsubscribeSession = currentSession.subscribe(session => {
         currentUserUnsubscribe = currentUser.subscribe((user) => {
             users.update(users => users);
 
-            console.log('cache loading');
             if (!user) return;
 
             wallets.update(() => {
@@ -95,7 +94,10 @@ function createUser(name: string, password: string): User {
         },
         networks: 1,
         settings: {
-            tokens: []
+            tokens: {
+                visibility: {},
+                disabled: {}
+            }
         }
     };
 }
