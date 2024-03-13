@@ -11,6 +11,11 @@ type PinnedItemsType = {
     analytics?: boolean;
 }
 
+type SettingsType = {
+    tokens: Hex[];
+    // wallets: Hex[];
+}
+
 export type User = {
     id: string;
     name: string;
@@ -19,6 +24,7 @@ export type User = {
     tokens: Token[];
     pinned: PinnedItemsType;
     networks: number;
+    settings: SettingsType;
 }
 
 export const currentUser = writable<User | null>(null);

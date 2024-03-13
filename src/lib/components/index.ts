@@ -13,3 +13,4 @@ export { default as Collapsible } from './Collapsible.svelte';
 export { default as Divider } from './Divider.svelte';
 export { default as Modal } from './Modal.svelte';
 export { default as Popup } from './Popup.svelte';
+export { default as Truncate } from './Truncate.svelte';
