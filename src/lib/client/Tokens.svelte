@@ -31,7 +31,7 @@
                 : ''}"
             labelClass="search rounded {border} {dashboard
                 ? 'has-[:focus]:bg-slate-700'
-                : ''} has-[:focus]:flex-grow transition-all has-[:focus]:mr-2 overflow-hidden"
+                : ''} has-[:focus]:flex-grow transition-all overflow-hidden"
             background=""
         >
             <Row
@@ -43,11 +43,6 @@
                 <MaterialSymbol name="search" />
             </Row>
         </Input>
-        <Row name="settings" grow={0} layout="h-full rounded {border}">
-            <Link href="/tokens/settings" layout="flex justify-center items-center {mini}">
-                <MaterialSymbol name="settings" fill={dashboard} />
-            </Link>
-        </Row>
     </Row>
     <Column name="token-list" layout="bg-slate-700 rounded gap-2 p-2 h-full overflow-auto">
         {#each tokens as token (token)}
