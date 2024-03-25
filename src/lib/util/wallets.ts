@@ -44,7 +44,7 @@ export const NETWORK_RPCS = {
     BSC: 'https://go.getblock.io/26b25c71cb46443c9683ad99b6fdca29',
     POLYGON: 'https://go.getblock.io/2be973ac141b474abdb392aee51cc2fb',
     SEPOLIA: 'https://go.getblock.io/d233dcde4966477bbb6fe8a805be61f0',
-    GOERLI: 'https://go.getblock.io/fe72d50e590e4695aeb1d0cc8ba87c27',
+    // GOERLI: 'https://go.getblock.io/fe72d50e590e4695aeb1d0cc8ba87c27',
     HOLESKY: 'https://go.getblock.io/8883166e207f4e05bfcd3b1d403c0b3c',
     BSC_TESTNET: 'https://go.getblock.io/c2b981c62b0d4c84bb3c853008a964dc'
 } as const;
@@ -105,8 +105,8 @@ export function getNetworkRPC(network: Network) {
             return NETWORK_RPCS.ETHEREUM;
         case NETWORKS.SEPOLIA:
             return NETWORK_RPCS.SEPOLIA;
-        case NETWORKS.GOERLI:
-            return NETWORK_RPCS.GOERLI;
+        // case NETWORKS.GOERLI:
+        //     return NETWORK_RPCS.GOERLI;
         case NETWORKS.HOLESKY:
             return NETWORK_RPCS.HOLESKY;
         case NETWORKS.BSC:

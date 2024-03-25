@@ -4,7 +4,7 @@
     import { removeWallet } from '$lib/util/client/user';
     import { type WalletInterface } from '$lib/util/client/wallet';
     import { Row, Column } from '$lib/components/layout';
-    import { Button, Divider, Link, MaterialSymbol } from '$lib/components';
+    import { Button, Divider, Link, MaterialSymbol, Truncate } from '$lib/components';
     import { Tab, TabGroup } from '@skeletonlabs/skeleton';
     import { currentUser } from '$lib/util/client/user';
     import { clients } from '$lib/util/client/wallets';
@@ -40,14 +40,16 @@
 
 {#if compact}
     <Link
-        layout="wallet flex flex-shrink-0 py-2 pl-4 pr-2 rounded overflow-hidden bg-slate-600"
+        layout="wallet flex min-w-min py-2 bg-slate-600 px-3"
         href="/wallets/{address}"
     >
-        <Button type={0} layout="address flex-grow-0 w-2/5 text-lg" onClick={(e) => (e.stopPropagation(), copy(address))}>
-            <span class="flex-1 overflow-hidden text-ellipsis text-sm">{address}</span>
-            <MaterialSymbol name="content_copy" />
-        </Button>
-        <Divider vr={1} spacing="mx-3" />
+        <Row name="address" grow={0} layout="h-full w-60 sticky left-3 text-center bg-slate-600">
+            <Truncate layout="text-sm">{address}</Truncate>
+            <Button type={0} layout="text-lg w-5 h-5 flex-shrink-0" onClick={(e) => (e.stopPropagation(), copy(address))}>
+                <MaterialSymbol name="content_copy" />
+            </Button>
+            <Divider vr={1} spacing="ml-2 mr-3" />
+        </Row>
         <Row name="balance" justify={1} layout="h-full whitespace-nowrap overflow-hidden">
             {#await client.getBalances($clients)}
                 {$t('wallet.loading-balance')}
@@ -56,15 +58,12 @@
                     {#if index !== 0}
                         <Divider vr={1} spacing="mx-3" />
                     {/if}
-                    <span class="flex-1 text-center truncate">
+                    <Truncate layout="w-20 flex-shrink-0 text-center">
                         {formatEther(currency.balance)}
-                    </span>
+                    </Truncate>
                 {/each}
             {/await}
         </Row>
-        <Button type={0} layout="flex-shrink-0 w-6 h-6 text-xl" onClick={(e) => (e.stopPropagation(), removeWallet(privateKey))}>
-            <MaterialSymbol name="close" />
-        </Button>
     </Link>
 {:else}
     <Link
@@ -76,7 +75,7 @@
         </Button>
         <Row name="address" layout="w-full px-8">
             <Button type={0} layout="py-1 pl-3 pr-2 w-full rounded-full bg-cyan-900 text-lg" onClick={(e) => (e.preventDefault(), copy(address))}>
-                <span class="flex-1 overflow-hidden text-ellipsis text-xs">{address}</span>
+                <Truncate layout="text-xs">{address}</Truncate>
                 <MaterialSymbol name="content_copy" />
             </Button>
         </Row>

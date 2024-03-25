@@ -1,15 +1,16 @@
 
 <script lang="ts">
-    import { formatEther, type Hex } from 'viem';
     import type { PageData } from './$types';
+    import { formatEther, type Hex } from 'viem';
     import { t } from '$lib/i18n';
+    import { copy } from '$lib/util';
     import { getNetworkName, type Network } from '$lib/util/wallets';
     import { tokenCache } from '$lib/util/client/cache';
     import { type WalletInterface } from '$lib/util/client/wallet';
     import { wallets, clients } from '$lib/util/client/wallets';
     import { currentUser } from '$lib/util/client/user';
     import { Column, Row } from '$lib/components/layout';
-    import { Divider, Link, MaterialSymbol, Toggle, Truncate } from '$lib/components';
+    import { Button, Divider, Link, MaterialSymbol, Toggle, Truncate } from '$lib/components';
 
     export let data: PageData;
 
@@ -22,7 +23,6 @@
 
         return null;
     }
-
 
     function toggleVisibility() {
         if (!$currentUser) return;
@@ -72,7 +72,15 @@
                 <img src="/tokens/unknown.png" alt={name} class="token-image rounded-xl h-full w-28 md:w-auto mb-4 md:mb-0 md:mr-12" />
                 <Column name="token-metadata" layout="min-w-0 w-full text-center md:text-left">
                     <Truncate layout="font-semibold text-xl md:text-3xl mb-1">{name} ({symbol})</Truncate>
-                    <Truncate layout="md:text-xl">{$t(getNetworkName(network))}</Truncate>
+                    <Row grow={0} justify={1} layout="md:justify-start">
+                        <Truncate layout="flex-grow-0">{data.slug}</Truncate>
+                        <Button type={0} layout="flex-shrink-0 ml-2 p-1 min-w-0 rounded-full bg-cyan-900 text-lg" onClick={(e) => (e.preventDefault(), copy(data.slug))}>
+                            <MaterialSymbol name="content_copy" />
+                        </Button>
+                    </Row>
+                    <Truncate layout="md:text-lg">
+                        {$t(getNetworkName(network))}
+                    </Truncate>
                 </Column>
             </Column>
             <Row grow={0} layout="min-w-0">
@@ -81,7 +89,7 @@
             </Row>
             <Divider spacing="my-2" />
             <Row grow={0} layout="min-w-0 mb-8">
-                <Truncate>Enable this token</Truncate>
+                <Truncate>Disable this token</Truncate>
                 <Toggle checked={!!isDisabled} labelClass="ml-4" onChange={toggleDisability} />
             </Row>
             <Column name="wallets" grow={0} layout="min-w-0 w-full">
