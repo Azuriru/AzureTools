@@ -7,7 +7,7 @@
     import { currentUser } from '$lib/util/client/user';
     import { clients, wallets } from '$lib/util/client/wallets';
     import { decrypt, getNetworkCurrency } from '$lib/util/wallets';
-    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Link } from '$lib/components';
+    import { Input, Button, Divider, MaterialSymbol, Modal, Textarea, Link, Truncate } from '$lib/components';
     import { Row, Column } from '$lib/components/layout';
     import Wallet from './Wallet.svelte';
     import ImportWallets from './ImportWallets.svelte';
@@ -106,35 +106,37 @@
                     </Row>
                 </Row>
             </Row>
-            <Column name="scroller" layout="overflow-auto rounded bg-slate-700">
+
+            <Column name="scroller" layout="rounded bg-slate-700 overflow-hidden {compact ? 'p-2' : ''}">
                 {@const isCompact = compact
-                    ? 'flex-col gap-2 p-2'
+                    ? 'flex-col gap-2 overflow-auto rounded'
                     : 'grid gap-4 p-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'}
-                <Column name="wallet-list" layout={isCompact} shrink={0} grow={0}>
+                <Column name="wallet-list" layout={isCompact} shrink={0} grow={compact}>
                     {#if compact}
                         <Row
                             name="wallet-header"
+                            layout="min-w-min py-2 bg-slate-600 px-3"
                             grow={0}
-                            shrink={0}
-                            layout="py-2 pl-4 pr-2 rounded bg-slate-600"
                         >
-                            <Row name="address" grow={0} layout="w-2/5">
-                                <span class="flex-1 overflow-hidden text-ellipsis">{$t('wallet.address')}</span>
+                            <Row name="address" grow={0} layout="h-full w-60 sticky left-3 text-center bg-slate-600">
+                                <Truncate layout="">
+                                    {$t('wallet.address')}
+                                </Truncate>
+                                <Divider vr={1} spacing="mx-3" />
                             </Row>
-                            <Divider vr={1} spacing="mx-3" />
-                            <Row name="balance" layout="h-full whitespace-nowrap overflow-hidden">
+                            <Row name="balance" layout="h-full">
                                 {#each Object.values($clients).map(client => client.chain) as chain, index (chain)}
                                     {#if index !== 0}
                                         <Divider vr={1} spacing="mx-3" />
                                     {/if}
-                                    <span class="flex-1 text-center truncate">
+                                    <Truncate layout="w-20 flex-shrink-0 text-center">
                                         {getNetworkCurrency(chain?.name) || $t('wallet.currency-unknown')}
-                                    </span>
+                                    </Truncate>
                                 {/each}
                             </Row>
-                            <Row name="empty" grow={0} layout="w-6 flex-shrink-0" />
                         </Row>
                     {/if}
+
                     {#each $wallets as wallet (wallet)}
                         <Wallet client={wallet} {compact} />
                     {/each}

@@ -9,5 +9,5 @@
         "css-unused-selector": "ignore",
         "a11y-autofocus": "ignore",
     },
-    "discord.enabled": false
+    "discord.enabled": true
 }
